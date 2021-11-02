@@ -55,14 +55,14 @@ module.exports = {
 				return await interaction.reply({ content: `The total is ${content.total.toLocaleString()}`, ephemeral, files: [mFile] })
 			}
 			catch (err) {
-				console.error(err)
+				console.error(err, interaction)
 				return await interaction.reply({ content: `Error: ${err.message}`, ephemeral: true })
 			}
 			finally {
 				if (gFile != null) {
 					unlink(gFile, (err) => {
 						if (err) {
-							console.error(err)
+							console.error(err, interaction)
 						}
 					})
 				}
