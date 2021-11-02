@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
-const { join } = require('path')
 const { unlink } = require('fs')
 const addModifiers = require('../util/addModifiers')
 const buildTempFile = require('../util/buildTempFile')
@@ -62,8 +61,11 @@ module.exports = {
 			}
 			finally {
 				if (gFile != null) {
-					const path = join(__dirname, '../', '/tmp')
-					unlink(join(path, gFile))
+					unlink(gFile, (err) => {
+						if (err) {
+							console.error(err)
+						}
+					})
 				}
 			}
 		}

@@ -3,7 +3,6 @@ const buildTempFile = require('../util/buildTempFile')
 const roll = require('../util/roll')
 const rollsWriteContent = require('../util/rollsWriteContent')
 const { unlink } = require('fs')
-const { join } = require('path')
 const { MessageAttachment } = require('discord.js')
 
 
@@ -69,8 +68,11 @@ module.exports = {
 			}
 			finally {
 				if (gFile != null) {
-					const path = join(__dirname, '../', '/tmp')
-					unlink(join(path, gFile))
+					unlink(gFile, (err) => {
+						if (err) {
+							console.error(err)
+						}
+					})
 				}
 			}
 		}
