@@ -16,6 +16,12 @@ module.exports = (allRolls) => {
 					else if (value === false || value == null) {
 						delete element[key]
 					}
+					else if (key === 'rerollsSafeHit' && value === true) {
+						element[key] = 'Max rerolls hit. This is done to reduce server stress'
+					}
+					else if (key === 'explodeSafeHit' && value === true) {
+						element[key] = 'Max explodes hit. This is done to reduce server stress'
+					}
 				}
 				arr.push(element)
 			})

@@ -14,11 +14,11 @@ module.exports = ({ size, number, rerolls, explode, modifiers }) => {
 			for (let i = 0; i < rerolls && maxSafeRerolls > 0; i++) {
 				allRolls.push({
 					total: 0,
+					rerollsSafeHit: false,
+					explodeSafeHit: false,
 					rolls: [],
 					modifieds: [],
-					rerollsSafeHit: false,
-					explodes: [],
-					explodeSafeHit: false
+					explodes: []
 				})
 				for (let x = 0; x < number; x++) {
 					let roll = random(1, size)
