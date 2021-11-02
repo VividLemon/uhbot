@@ -1,5 +1,9 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
+const { join } = require('path')
+const { readdir, unlink } = require('fs/promises')
 const addModifiers = require('../util/addModifiers')
+const buildTempFile = require('../util/buildTempFile')
+const { MessageAttachment } = require('discord.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -19,32 +23,45 @@ module.exports = {
 		const ephemeral = interaction.options.getBoolean('ephemeral') ?? false
 		const modifiers = interaction.options.getString('modifiers') ?? ''
 		const values = interaction.options.getString('values')
-		let total
-		values.split(/\s+/).forEach((element) => {
-			const value = Number.parseFloat(element)
-			if (!isNaN(value)) {
-				if (total == null) {
-					total = value
+		const nums = values.split(/\s+/).filter((element) => !isNaN(element))
+		if (values === '') {
+			return await interaction.reply({ content: 'Value cannot be empty', ephemeral: true })
+		}
+		else if (!nums.length) {
+			return await interaction.reply({ content: 'Values contains no numbers', ephemeral: true })
+		}
+		else {
+			try {
+				const obj = {
+					total: 0,
+					value: 0,
+					modifieds: 0
 				}
-				else if (modifiers) {
-					const regex = /[+|\-|*|x|/]\d+/g
-					modifiers.match(regex).forEach((mod) => {
-						const modified = addModifiers(mod, value)
-						if (modified !== false) {
-							total = total + modified
-						}
-					})
+				nums.forEach((element) => {
+					element = Number.parseInt(element)
+					obj.value = obj.value + element
+					obj.total = obj.value
+				})
+				if (modifiers) {
+					const mods = addModifiers(modifiers, obj.total)
+					obj.modifieds = mods
+					obj.total = obj.modifieds
 				}
 				else {
-					total = total + value
+					delete obj.modifieds
 				}
+				const file = await buildTempFile(JSON.stringify(obj, null, 2))
+				const mFile = new MessageAttachment(file)
+				return await interaction.reply({ content: `The total is ${obj.total.toLocaleString()}`, ephemeral, files: [mFile] })
 			}
-		})
-		let content = `This equals ${total}`
-		const modReplace = modifiers.replace(/\s+/g, '')
-		content = (modifiers)
-			? `${content}\nWith each value being modified by ${modReplace}`
-			: content
-		await interaction.reply({ content, ephemeral })
+			catch (err) {
+				console.error(err)
+				return await interaction.reply({ content: `Error: ${err.message}`, ephemeral: true })
+			}
+			finally {
+				const path = join(__dirname, '../', '/tmp')
+				readdir(path).then((resp) => resp.forEach((file) => unlink(join(path, file))))
+			}
+		}
 	}
 }

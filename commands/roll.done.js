@@ -59,11 +59,11 @@ module.exports = {
 				const content = await rollsWriteContent(obj)
 				const file = await buildTempFile(JSON.stringify(content, null, 2))
 				const mFile = new MessageAttachment(file)
-				return await interaction.reply({ content: `The total is ${content.total}`, ephemeral, files: [mFile] })
+				return await interaction.reply({ content: `The total is ${content.total.toLocaleString()}`, ephemeral, files: [mFile] })
 			}
 			catch (err) {
 				console.error(err)
-				return await interaction.reply({ content: 'There was an error while trying to execute this command', ephemeral: true })
+				return await interaction.reply({ content: `Error: ${err.message}`, ephemeral: true })
 			}
 			finally {
 				const path = join(__dirname, '../', '/tmp')

@@ -53,20 +53,21 @@ module.exports = {
 					modifieds: 0
 				}
 				if (modifiers) {
-					const mods = await addModifiers(modifiers, avg)
+					const mods = addModifiers(modifiers, avg)
 					obj.modifieds = mods * rerolls
 					obj.total = obj.modifieds
 				}
 				else {
 					obj.total = obj.averages
+					delete obj.modifieds
 				}
 				const file = await buildTempFile(JSON.stringify(obj, null, 2))
 				const mFile = new MessageAttachment(file)
-				await interaction.reply({ content: `The total is ${obj.total}`, ephemeral, files: [mFile] })
+				return await interaction.reply({ content: `The total is ${obj.total.toLocaleString()}`, ephemeral, files: [mFile] })
 			}
 			catch (err) {
 				console.error(err)
-				return await interaction.reply({ content: 'There was an error while trying to execute this command', ephemeral: true })
+				return await interaction.reply({ content: `Error: ${err.message}`, ephemeral: true })
 			}
 			finally {
 				const path = join(__dirname, '../', '/tmp')

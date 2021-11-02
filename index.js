@@ -26,7 +26,7 @@ client.on('interactionCreate', async (interaction) => {
 	}
 	catch (error) {
 		console.error(error)
-		await interaction.reply({ content: 'There was an error while trying to execute this command', ephemeral: true })
+		return await interaction.reply({ content: 'There was an error while trying to execute this command\nError was logged', ephemeral: true })
 	}
 })
 

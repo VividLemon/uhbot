@@ -29,14 +29,14 @@ module.exports = {
 		else {
 			try {
 				const obj = await addToHop(skill, hops)
-				let content = `You can get to skill level: ${obj.newSkill}`
-				content = `${content}\nStarting at level: ${obj.oldSkill}`
-				content = `${content}\nWith ${obj.hopsRemaining} ${(Math.abs(obj.hopsRemaining) === 1) ? 'hop' : 'hops'} remaining`
+				let content = `You can get to skill level: ${obj.newSkill.toLocaleString()}`
+				content = `${content}\nStarting at level: ${obj.oldSkill.toLocaleString()}`
+				content = `${content}\nWith ${obj.hopsRemaining.toLocaleString()} ${(Math.abs(obj.hopsRemaining) === 1) ? 'hop' : 'hops'} remaining`
 				return await interaction.reply({ content, ephemeral })
 			}
 			catch (err) {
 				console.error(err)
-				return await interaction.reply({ content: 'Issue while trying to execute command', ephemeral: true })
+				return await interaction.reply({ content: `Error: ${err.message}`, ephemeral: true })
 			}
 		}
 	}

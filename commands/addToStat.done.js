@@ -29,11 +29,14 @@ module.exports = {
 		else {
 			try {
 				const hops = await addToStat(from, to)
-				return await interaction.reply({ content: `Hops value: ${hops}`, ephemeral })
+				let content = `It takes ${hops.toLocaleString()} hops`
+				content = `${content}\nTo get to level ${to.toLocaleString()}`
+				content = `${content}\nFrom level ${from.toLocaleString()}`
+				return await interaction.reply({ content, ephemeral })
 			}
 			catch (err) {
 				console.error(err)
-				return await interaction.reply({ content: 'Issue while trying to execute command', ephemeral: true })
+				return await interaction.reply({ content: `Error: ${err.message}`, ephemeral: true })
 			}
 		}
 	}

@@ -7,11 +7,11 @@ const { MessageAttachment } = require('discord.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('subtract')
-		.setDescription('Subtracts multiple inputs')
+		.setName('multiply')
+		.setDescription('Multiplies multiple inputs')
 		.addStringOption((option) =>
 			option.setName('values')
-				.setDescription('Each value you wish to subtract separated by a space, ex: 10 20 30 40')
+				.setDescription('Each value you wish to multiply separated by a space, ex: 10 20 30 40')
 				.setRequired(true))
 		.addStringOption((option) =>
 			option.setName('modifiers')
@@ -40,7 +40,7 @@ module.exports = {
 				nums.forEach((element, index) => {
 					if (index !== 0) {
 						element = Number.parseInt(element)
-						obj.value = obj.value - element
+						obj.value = obj.value * element
 						obj.total = obj.value
 					}
 				})

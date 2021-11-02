@@ -1,5 +1,5 @@
 const { random } = require('lodash')
-const addModifiers = require('./addModifiers').default
+const addModifiers = require('./addModifiers')
 /**
  *
  * @param {{size: number, number: number, rerolls: number, explode: number, modifiers: string}} object
@@ -24,12 +24,9 @@ module.exports = ({ size, number, rerolls, explode, modifiers }) => {
 					let roll = random(1, size)
 					allRolls[i].rolls.push(roll)
 					if (modifiers) {
-						addModifiers(modifiers, roll)
-							.then((resp) => {
-								allRolls[i].modifieds.push(resp)
-								allRolls[i].total = allRolls[i].total + resp
-							})
-							.catch((err) => reject(err))
+						const added = addModifiers(modifiers, roll)
+						allRolls[i].modifieds.push(added)
+						allRolls[i].total = allRolls[i].total + added
 					}
 					else {
 						allRolls[i].total = allRolls[i].total + roll

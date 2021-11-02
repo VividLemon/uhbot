@@ -7,11 +7,11 @@ const { MessageAttachment } = require('discord.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('subtract')
-		.setDescription('Subtracts multiple inputs')
+		.setName('divide')
+		.setDescription('Divides multiple inputs')
 		.addStringOption((option) =>
 			option.setName('values')
-				.setDescription('Each value you wish to subtract separated by a space, ex: 10 20 30 40')
+				.setDescription('Each value you wish to divide separated by a space, ex: 10 20 30 40')
 				.setRequired(true))
 		.addStringOption((option) =>
 			option.setName('modifiers')
@@ -30,6 +30,9 @@ module.exports = {
 		else if (!nums.length) {
 			return await interaction.reply({ content: 'Values contains no numbers', ephemeral: true })
 		}
+		else if (nums.findIndex((el) => Number.parseInt(el) === 0) !== -1) {
+			return await interaction.reply({ content: 'No values can be 0. Cannot divide by 0', ephemeral: true })
+		}
 		else {
 			try {
 				const obj = {
@@ -40,7 +43,7 @@ module.exports = {
 				nums.forEach((element, index) => {
 					if (index !== 0) {
 						element = Number.parseInt(element)
-						obj.value = obj.value - element
+						obj.value = obj.value / element
 						obj.total = obj.value
 					}
 				})
@@ -51,6 +54,11 @@ module.exports = {
 				}
 				else {
 					delete obj.modifieds
+				}
+				obj.total = Number.parseFloat(obj.total.toFixed(3))
+				obj.value = Number.parseFloat(obj.total.toFixed(3))
+				if (obj.modifieds) {
+					Number.parseFloat(obj.modifieds.toFixed(3))
 				}
 				const file = await buildTempFile(JSON.stringify(obj, null, 2))
 				const mFile = new MessageAttachment(file)
