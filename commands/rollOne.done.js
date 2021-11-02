@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders')
 const buildTempFile = require('../util/buildTempFile')
 const roll = require('../util/roll')
 const rollsWriteContent = require('../util/rollsWriteContent')
-const { readdir, unlink } = require('fs/promises')
+const { unlink } = require('fs')
 const { join } = require('path')
 const { MessageAttachment } = require('discord.js')
 
@@ -28,6 +28,7 @@ module.exports = {
 			option.setName('ephemeral')
 				.setDescription('Hides the value for only you to see')),
 	async execute(interaction) {
+		let gFile
 		const size = interaction.options.getInteger('size')
 		const rerolls = interaction.options.getInteger('rerolls') ?? 1
 		const ephemeral = interaction.options.getBoolean('ephemeral') ?? false
@@ -50,6 +51,7 @@ module.exports = {
 				const obj = await roll({ size, number: 1, rerolls, explode, modifiers })
 				const content = await rollsWriteContent(obj)
 				const file = await buildTempFile(JSON.stringify(content, null, 2))
+				gFile = file
 				const mFile = new MessageAttachment(file)
 				return await interaction.reply({ content: `The total is ${content.total.toLocaleString()}`, ephemeral, files: [mFile] })
 			}
@@ -58,8 +60,10 @@ module.exports = {
 				return await interaction.reply({ content: `Error: ${err.message}`, ephemeral: true })
 			}
 			finally {
-				const path = join(__dirname, '../', '/tmp')
-				readdir(path).then((resp) => resp.forEach((file) => unlink(join(path, file))))
+				if (gFile != null) {
+					const path = join(__dirname, '../', '/tmp')
+					unlink(join(path, gFile))
+				}
 			}
 		}
 	}

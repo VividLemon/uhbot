@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 const { join } = require('path')
-const { readdir, unlink } = require('fs/promises')
+const { unlink } = require('fs')
 const addModifiers = require('../util/addModifiers')
 const buildTempFile = require('../util/buildTempFile')
 const { MessageAttachment } = require('discord.js')
@@ -20,6 +20,7 @@ module.exports = {
 			option.setName('ephemeral')
 				.setDescription('Hides the value for only you to see')),
 	async execute(interaction) {
+		let gFile
 		const ephemeral = interaction.options.getBoolean('ephemeral') ?? false
 		const modifiers = interaction.options.getString('modifiers') ?? ''
 		const values = interaction.options.getString('values')
@@ -51,6 +52,7 @@ module.exports = {
 					delete obj.modifieds
 				}
 				const file = await buildTempFile(JSON.stringify(obj, null, 2))
+				gFile = file
 				const mFile = new MessageAttachment(file)
 				return await interaction.reply({ content: `The total is ${obj.total.toLocaleString()}`, ephemeral, files: [mFile] })
 			}
@@ -59,8 +61,10 @@ module.exports = {
 				return await interaction.reply({ content: `Error: ${err.message}`, ephemeral: true })
 			}
 			finally {
-				const path = join(__dirname, '../', '/tmp')
-				readdir(path).then((resp) => resp.forEach((file) => unlink(join(path, file))))
+				if (gFile != null) {
+					const path = join(__dirname, '../', '/tmp')
+					unlink(join(path, gFile))
+				}
 			}
 		}
 	}
