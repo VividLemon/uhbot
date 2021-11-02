@@ -9,6 +9,9 @@ module.exports = (modifiers, value) => {
 	const regex = /[+|\-|*|x|/]\d+/g
 	const match = modifiers.match(regex)
 	if (match == null) throw new Error('Incorrect values in modifiers')
+	if (match.length > process.env.MAX_SAFE_ARGS) {
+		throw new Error('Value is over the maximum safe arguments limit. Why are you using this many arguments?')
+	}
 	match.forEach((string) => {
 		const type = string.substring(0, 1)
 		const modifier = parseInt(string.substring(1))

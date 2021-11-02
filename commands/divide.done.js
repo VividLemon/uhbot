@@ -33,6 +33,10 @@ module.exports = {
 		else if (nums.findIndex((el) => Number.parseInt(el) === 0) !== -1) {
 			return await interaction.reply({ content: 'No values can be 0. Cannot divide by 0', ephemeral: true })
 		}
+		else if (nums.length > Number.parseInt(process.env.MAX_SAFE_ARGS)) {
+			console.warn(interaction)
+			return await interaction.reply({ content: 'Value is over the maximum safe arguments limit. Why are you using this many arguments?', ephemeral: true })
+		}
 		else {
 			try {
 				const obj = {

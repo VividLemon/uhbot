@@ -30,6 +30,10 @@ module.exports = {
 		else if (!nums.length) {
 			return await interaction.reply({ content: 'Values contains no numbers', ephemeral: true })
 		}
+		else if (nums.length > Number.parseInt(process.env.MAX_SAFE_ARGS)) {
+			console.warn(interaction)
+			return await interaction.reply({ content: 'Value is over the maximum safe arguments limit. Why are you using this many arguments?', ephemeral: true })
+		}
 		else {
 			try {
 				const obj = {
