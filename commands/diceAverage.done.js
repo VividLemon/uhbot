@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 const addModifiers = require('../util/addModifiers')
 const buildTempFile = require('../util/buildTempFile')
-const { unlink } = require('fs')
+const { unlink } = require('fs/promises')
 const { MessageAttachment } = require('discord.js')
 
 module.exports = {
@@ -72,11 +72,10 @@ module.exports = {
 			}
 			finally {
 				if (gFile != null) {
-					unlink(gFile, (err) => {
-						if (err) {
+					unlink(gFile)
+						.catch((err) => {
 							console.error(err, interaction)
-						}
-					})
+						})
 				}
 			}
 		}

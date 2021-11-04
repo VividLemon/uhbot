@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders')
 const buildTempFile = require('../util/buildTempFile')
 const roll = require('../util/roll')
 const rollsWriteContent = require('../util/rollsWriteContent')
-const { unlink } = require('fs')
+const { unlink } = require('fs/promises')
 const { MessageAttachment } = require('discord.js')
 
 
@@ -68,11 +68,10 @@ module.exports = {
 			}
 			finally {
 				if (gFile != null) {
-					unlink(gFile, (err) => {
-						if (err) {
+					unlink(gFile)
+						.catch((err) => {
 							console.error(err, interaction)
-						}
-					})
+						})
 				}
 			}
 		}

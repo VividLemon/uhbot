@@ -105,3 +105,7 @@ dist
 
 #vscode
 .vscode/
+
+#tmp
+tmp/*
+!tmp/README.md
