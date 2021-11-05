@@ -37,6 +37,9 @@ module.exports = {
 		const ephemeral = interaction.options.getBoolean('ephemeral') ?? false
 		const explode = interaction.options.getInteger('explode') ?? size + 1
 		const modifiers = interaction.options.getString('modifiers') ?? ''
+		// TODO consider adding an "end modifiers" and a "dice modifiers"
+		// dice-modifiers for dice
+		// modifiers as end modifiers
 		const rerolls = interaction.options.getInteger('rerolls') ?? 1
 		if (size < 1) {
 			return await interaction.reply({ content: 'Size cannot be negative or zero', ephemeral: true })

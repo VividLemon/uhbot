@@ -8,14 +8,9 @@ const { join } = require('path')
  */
 module.exports = (content) => {
 	return new Promise((resolve, reject) => {
-		try {
-			const pathToFile = join(__dirname, '../', '/tmp', `${randomUUID()}.tmp.json`)
-			writeFile(pathToFile, content)
-				.then(() => resolve(pathToFile))
-				.catch((err) => reject(err))
-		}
-		catch (err) {
-			reject(err)
-		}
+		const pathToFile = join(__dirname, '../', '/tmp', `${randomUUID()}.tmp.json`)
+		writeFile(pathToFile, content)
+			.then(() => resolve(pathToFile))
+			.catch((err) => reject(err))
 	})
 }

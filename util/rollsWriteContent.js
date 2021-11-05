@@ -6,33 +6,28 @@ const { sumBy } = require('lodash')
  */
 module.exports = (allRolls) => {
 	return new Promise((resolve, reject) => {
-		try {
-			const arr = []
-			allRolls.forEach((element) => {
-				for (const [key, value] of Object.entries(element)) {
-					if (Array.isArray(value) && value.length === 0) {
-						delete element[key]
-					}
-					else if (value === false || value == null) {
-						delete element[key]
-					}
-					else if (key === 'rerollsSafeHit' && value === true) {
-						element[key] = 'Max rerolls hit. This is done to reduce server stress'
-					}
-					else if (key === 'explodeSafeHit' && value === true) {
-						element[key] = 'Max explodes hit. This is done to reduce server stress'
-					}
+		const arr = []
+		allRolls.forEach((element) => {
+			for (const [key, value] of Object.entries(element)) {
+				if (Array.isArray(value) && value.length === 0) {
+					delete element[key]
 				}
-				arr.push(element)
-			})
-			const obj = {
-				total: sumBy(allRolls, 'total'),
-				rolls: arr
+				else if (value === false || value == null) {
+					delete element[key]
+				}
+				else if (key === 'rerollsSafeHit' && value === true) {
+					element[key] = 'Max rerolls hit. This is done to reduce server stress'
+				}
+				else if (key === 'explodeSafeHit' && value === true) {
+					element[key] = 'Max explodes hit. This is done to reduce server stress'
+				}
 			}
-			resolve(obj)
+			arr.push(element)
+		})
+		const obj = {
+			total: sumBy(allRolls, 'total'),
+			rolls: arr
 		}
-		catch (err) {
-			reject(err)
-		}
+		resolve(obj)
 	})
 }

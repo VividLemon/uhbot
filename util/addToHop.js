@@ -6,34 +6,29 @@
  */
 module.exports = (skill, hops) => {
 	return new Promise((resolve, reject) => {
-		try {
-			let oldSkillPlus = skill
-			let hopsUsed = hops
-			while (hopsUsed > 0) {
-				if (oldSkillPlus.toString().endsWith('9')) {
-					hopsUsed = hopsUsed - Math.ceil(oldSkillPlus / 10)
-				}
-				else {
-					let div = Math.floor(oldSkillPlus / 10)
-					if (div === 0) {
-						div = 1
-					}
-					hopsUsed = hopsUsed - div
-				}
-				if (hopsUsed >= 0) {
-					oldSkillPlus = oldSkillPlus + 1
-					hops = hopsUsed
-				}
+		let oldSkillPlus = skill
+		let hopsUsed = hops
+		while (hopsUsed > 0) {
+			if (Math.floor(oldSkillPlus % 10) === 9) {
+				hopsUsed = hopsUsed - Math.ceil(oldSkillPlus / 10)
 			}
-			const obj = {
-				oldSkill: skill,
-				newSkill: oldSkillPlus,
-				hopsRemaining: hops
+			else {
+				let div = Math.floor(oldSkillPlus / 10)
+				if (div === 0) {
+					div = 1
+				}
+				hopsUsed = hopsUsed - div
 			}
-			resolve(obj)
+			if (hopsUsed >= 0) {
+				oldSkillPlus = oldSkillPlus + 1
+				hops = hopsUsed
+			}
 		}
-		catch (err) {
-			reject(err)
+		const obj = {
+			oldSkill: skill,
+			newSkill: oldSkillPlus,
+			hopsRemaining: hops
 		}
+		resolve(obj)
 	})
 }
