@@ -1,10 +1,12 @@
 const { sumBy } = require('lodash')
+const addModifiers = require('./addModifiers')
 /**
  *
  * @param {Array<{total: number}>} allRolls
+ * @param {String} modifiers
  * @returns {Promise<{total: number, rolls: Array<any>}} {total: number, rolls: Array<any>}
  */
-module.exports = (allRolls) => {
+module.exports = (allRolls, modifiers = false) => {
 	return new Promise((resolve, reject) => {
 		const arr = []
 		allRolls.forEach((element) => {
@@ -24,10 +26,18 @@ module.exports = (allRolls) => {
 			}
 			arr.push(element)
 		})
-		const obj = {
-			total: sumBy(allRolls, 'total'),
-			rolls: arr
+		const sum = sumBy(allRolls, 'total')
+		if (modifiers) {
+			return resolve({
+				total: addModifiers(modifiers, sum),
+				value: sum,
+				modifiers,
+				rolls: arr
+			})
 		}
-		resolve(obj)
+		resolve({
+			total: sum,
+			rolls: arr
+		})
 	})
 }

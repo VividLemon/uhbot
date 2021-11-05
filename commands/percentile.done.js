@@ -11,7 +11,10 @@ module.exports = {
 		.setDescription('Roles a 100 sided die')
 		.addStringOption((option) =>
 			option.setName('modifiers')
-				.setDescription('Modifies each roll with a given modified (+, -, *, /). Executes in the order provided, ex (+5-2*3)'))
+				.setDescription('Modifies the final with a given modified (+,-,*,/). Executes in the order provided, ex (+5-2*3)'))
+		.addStringOption((option) =>
+			option.setName('dice-modifiers')
+				.setDescription('Modifies each dice roll with a given modifier. Explodes excluded'))
 		.addIntegerOption((option) =>
 			option.setName('explode')
 				.setDescription('Causes a reroll when the roll value hits or exceeds target'))
@@ -26,6 +29,7 @@ module.exports = {
 		const ephemeral = interaction.options.getBoolean('ephemeral') ?? false
 		const explode = interaction.options.getInteger('explode') ?? 101
 		const modifiers = interaction.options.getString('modifiers') ?? ''
+		const diceModifiers = interaction.options.getString('dice-modifiers') ?? ''
 		const rerolls = interaction.options.getInteger('rerolls') ?? 1
 		if (explode < 1) {
 			return await interaction.reply({ content: 'Explode cannot be negative or zero', ephemeral: true })
@@ -41,8 +45,8 @@ module.exports = {
 		}
 		else {
 			try {
-				const obj = await roll({ size: 100, number: 1, rerolls, explode, modifiers })
-				const content = await rollsWriteContent(obj)
+				const obj = await roll({ size: 100, number: 1, rerolls, explode, diceModifiers })
+				const content = await rollsWriteContent(obj, modifiers)
 				const file = await buildTempFile(JSON.stringify(content, null, 2))
 				gFile = file
 				const mFile = new MessageAttachment(file)

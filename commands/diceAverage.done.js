@@ -18,7 +18,7 @@ module.exports = {
 				.setRequired(true))
 		.addStringOption((option) =>
 			option.setName('modifiers')
-				.setDescription('Modifies each value with a given modified (+, -, *, /). Executes in the order provided, ex (+5-2*3)'))
+				.setDescription('Modifies the final with a given modified (+,-,*,/). Executes in the order provided, ex (+5-2*3)'))
 		.addIntegerOption((option) =>
 			option.setName('rerolls')
 				.setDescription('Rerolls the same size and number of dice x amount of times'))
@@ -47,19 +47,17 @@ module.exports = {
 		else {
 			try {
 				const avg = Math.round(((size + 1) / 2) * (number))
+				const avgs = avg * rerolls
 				const obj = {
-					total: 0,
-					averages: (avg * rerolls),
-					modifieds: 0
+					total: avgs,
+					averages: avgs,
+					modifiers
 				}
 				if (modifiers) {
-					const mods = addModifiers(modifiers, avg)
-					obj.modifieds = mods * rerolls
-					obj.total = obj.modifieds
+					obj.total = addModifiers(modifiers, avg) * rerolls
 				}
 				else {
-					obj.total = obj.averages
-					delete obj.modifieds
+					delete obj.modifiers
 				}
 				const file = await buildTempFile(JSON.stringify(obj, null, 2))
 				gFile = file

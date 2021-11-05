@@ -14,7 +14,7 @@ module.exports = {
 				.setRequired(true))
 		.addStringOption((option) =>
 			option.setName('modifiers')
-				.setDescription('Modifies each value with a given modified (+, -, *, /). Executes in the order provided, ex (+5-2*3)'))
+				.setDescription('Modifies the final with a given modified (+,-,*,/). Executes in the order provided, ex (+5-2*3)'))
 		.addBooleanOption((option) =>
 			option.setName('ephemeral')
 				.setDescription('Hides the value for only you to see')),
@@ -39,7 +39,7 @@ module.exports = {
 				const obj = {
 					total: Number.parseInt(nums[0]),
 					value: Number.parseInt(nums[0]),
-					modifieds: 0
+					modifiers: modifiers || null
 				}
 				nums.forEach((element, index) => {
 					if (index !== 0) {
@@ -49,12 +49,10 @@ module.exports = {
 					}
 				})
 				if (modifiers) {
-					const mods = addModifiers(modifiers, obj.total)
-					obj.modifieds = mods
-					obj.total = obj.modifieds
+					obj.total = addModifiers(modifiers, obj.total)
 				}
 				else {
-					delete obj.modifieds
+					delete obj.modifiers
 				}
 				const file = await buildTempFile(JSON.stringify(obj, null, 2))
 				gFile = file
