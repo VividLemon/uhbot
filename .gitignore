@@ -109,3 +109,6 @@ dist
 #tmp
 tmp/*
 !tmp/README.md
+
+#Sqlite
+sqlite/*.sqlite

@@ -30,4 +30,16 @@ client.on('interactionCreate', async (interaction) => {
 	}
 })
 
+client.on('interactionCreate', async (interaction) => {
+	if (!interaction.isButton()) return
+	const command = client.commands.get(interaction.message.interaction.name)
+	try {
+		await command.buttonExecute(interaction)
+	}
+	catch (err) {
+		console.error(err, interaction)
+		return await interaction.reply({ content: 'There was an error while trying to execute this command\nError was logged', ephemeral: true })
+	}
+})
+
 client.login(process.env.TOKEN)
