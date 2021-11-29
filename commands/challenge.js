@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
-const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js')
+const { MessageActionRow, MessageButton } = require('discord.js')
 const Keyv = require('keyv')
 const { join } = require('path')
 
