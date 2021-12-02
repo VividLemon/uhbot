@@ -38,8 +38,7 @@ module.exports = {
 					challenger: interaction.user.id,
 					challengerPlayed: null,
 					victim: victim.id,
-					victimPlayed: null,
-					expanded
+					victimPlayed: null
 				})
 			const row = (expanded)
 				? new MessageActionRow()
@@ -56,7 +55,11 @@ module.exports = {
 						new MessageButton().setCustomId('paper').setLabel('Paper').setStyle('SECONDARY'),
 						new MessageButton().setCustomId('scissors').setLabel('Scissors').setStyle('SUCCESS')
 					)
-			return await interaction.reply({ content: `${victim} you have been challenged by ${interaction.user} to a duel!\nExpires at ${time.toLocaleTimeString()}`, components: [row] })
+			const endRow = new MessageActionRow()
+				.addComponents(
+					new MessageButton().setCustomId('end').setLabel('End game').setStyle('SECONDARY')
+				)
+			return await interaction.reply({ content: `${victim} you have been challenged by ${interaction.user} to a duel!\nExpires at ${time.toLocaleTimeString()}`, components: [row, endRow] })
 		}
 	},
 	async buttonExecute(interaction) {
@@ -65,11 +68,25 @@ module.exports = {
 		const challengeStr = `challenge-${challenger.id}-${victim.id}`
 
 		// Is player check
-		if (!(interaction.user.id === challenger.id || interaction.user.id === victim.id)) {
-			return await interaction.reply({ content: 'This isn\'t meant for you!', ephemeral: true })
-		}
-		const challenge = await keyv.get(challengeStr)
+		if (!(interaction.user.id === challenger.id || interaction.user.id === victim.id)) return await interaction.reply({ content: 'This isn\'t meant for you!', ephemeral: true })
 
+		// End game check
+		if (interaction.customId === 'end') {
+			// Is challenger check for end game
+			if (interaction.user.id === challenger.id) {
+				keyv.delete(challengeStr)
+				return await interaction.update({ content: 'Game ended by Challenger', components: [] })
+			}
+			else if (interaction.user.id === victim.id) {
+				keyv.delete(challengeStr)
+				return await interaction.update({ content: 'Game ended by Victim', components: [] })
+			}
+			else {
+				return await interaction.reply({ content: 'This isn\'t meant for you!', ephemeral: true })
+			}
+		}
+
+		const challenge = await keyv.get(challengeStr)
 		// Is expired check
 		if (Date.now() > new Date(challenge.time).getTime()) {
 			keyv.delete(challengeStr)
@@ -85,139 +102,120 @@ module.exports = {
 			const chalPlay = challenge.challengerPlayed
 			const victPlay = challenge.victimPlayed
 			keyv.delete(challengeStr)
-			if (chalPlay === 'rock') {
-				if (victPlay === 'rock') {
-					await interaction.reply({ content: 'The game is a draw, both players chose Rock' })
-					return await interaction.update({ content: 'Game has ended, Draw', components: [] })
+			switch (chalPlay) {
+			case 'rock':
+				switch (victPlay) {
+				case 'rock':
+					await interaction.update({ content: 'The game is a draw, both players chose Rock', components: [] })
+					break
+				case 'paper':
+					await interaction.update({ content: 'The victim won the game, Paper Covers Rock', components: [] })
+					break
+				case 'scissors':
+					await interaction.update({ content: 'The challenger won the game, Rock Smashes Scissors', components: [] })
+					break
+				case 'lizard':
+					await interaction.update({ content: 'The challenger won the game, Rock Crushes Lizard', components: [] })
+					break
+				case 'spock':
+					await interaction.update({ content: 'The victim won the game, Spock vaporizes rock', components: [] })
+					break
+				default:
+					await interaction.update({ content: `Nobody won, error: Challenger played: ${chalPlay}, Victim played ${victPlay}`, ephemeral: true, components: [] })
+					break
 				}
-				if (victPlay === 'paper') {
-					await interaction.reply({ content: 'The victim won the game, Paper Covers Rock' })
-					return await interaction.update({ content: 'Game has ended, Victim Won', components: [] })
+				break
+			case 'paper':
+				switch (victPlay) {
+				case 'rock':
+					await interaction.update({ content: 'The challenger won the game, Paper Covers Rock', components: [] })
+					break
+				case 'paper':
+					await interaction.update({ content: 'The game is a draw, both players chose Paper', components: [] })
+					break
+				case 'scissors':
+					await interaction.update({ content: 'The victim won the game, Scissors Cuts Paper', components: [] })
+					break
+				case 'lizard':
+					await interaction.update({ content: 'The victim won the game, Lizard Eats Paper', components: [] })
+					break
+				case 'spock':
+					await interaction.update({ content: 'The challenger won the game, Paper Disproves Spock', components: [] })
+					break
+				default:
+					await interaction.update({ content: `Nobody won, error: Challenger played: ${chalPlay}, Victim played ${victPlay}`, ephemeral: true, components: [] })
+					break
 				}
-				else if (victPlay === 'scissors') {
-					await interaction.reply({ content: 'The challenger won the game, Rock Smashes Scissors' })
-					return await interaction.update({ content: 'Game has ended, Challenger Won', components: [] })
+				break
+			case 'scissors':
+				switch (victPlay) {
+				case 'rock':
+					await interaction.update({ content: 'The victim won the game, Rock Smashes Scissors', components: [] })
+					break
+				case 'paper':
+					await interaction.update({ content: 'The challenger won the game, Scissors Cuts Paper', components: [] })
+					break
+				case 'scissors':
+					await interaction.update({ content: 'The game is a draw, both players chose Scissors', components: [] })
+					break
+				case 'lizard':
+					await interaction.update({ content: 'The challenger won the game, Scissors Decapitates Lizard', components: [] })
+					break
+				case 'spock':
+					await interaction.update({ content: 'The victim won the game, Spock Smashes Scissors', components: [] })
+					break
+				default:
+					await interaction.update({ content: `Nobody won, error: Challenger played: ${chalPlay}, Victim played ${victPlay}`, ephemeral: true, components: [] })
+					break
 				}
-				else if (victPlay === 'lizard') {
-					await interaction.reply({ content: 'The challenger won the game, Rock Crushes Lizard' })
-					return await interaction.update({ content: 'Game has ended, Challenger Won', components: [] })
+				break
+			case 'lizard':
+				switch (victPlay) {
+				case 'rock':
+					await interaction.update({ content: 'The victim won the game, Rock Crushes Lizard', components: [] })
+					break
+				case 'paper':
+					await interaction.update({ content: 'The challenger won the game, Lizard Eats Paper', components: [] })
+					break
+				case 'scissors':
+					await interaction.update({ content: 'The victim won the game, Scissors Decapitates Lizard', components: [] })
+					break
+				case 'lizard':
+					await interaction.update({ content: 'The game is a draw, both players chose Lizard', components: [] })
+					break
+				case 'spock':
+					await interaction.update({ content: 'The challenger won the game, Lizard Poisons Spock', components: [] })
+					break
+				default:
+					await interaction.update({ content: `Nobody won, error: Challenger played: ${chalPlay}, Victim played ${victPlay}`, ephemeral: true, components: [] })
+					break
 				}
-				else if (victPlay === 'spock') {
-					await interaction.reply({ content: 'The victim won the game, Spock Vaporizes Rock' })
-					return await interaction.update({ content: 'Game has ended, Victim Won', components: [] })
+				break
+			case 'spock':
+				switch (victPlay) {
+				case 'rock':
+					await interaction.update({ content: 'The challenger won the game, Spock vaporizes rock', components: [] })
+					break
+				case 'paper':
+					await interaction.update({ content: 'The victim won the game, Paper Disproves Spock', components: [] })
+					break
+				case 'scissors':
+					await interaction.update({ content: 'The challenger won the game, Spock Smashes Scissors', components: [] })
+					break
+				case 'lizard':
+					await interaction.update({ content: 'The victim won the game, Lizard Poisons Spock', components: [] })
+					break
+				case 'spock':
+					await interaction.update({ content: 'The game is a draw, both players chose Spock', components: [] })
+					break
+				default:
+					await interaction.update({ content: `Nobody won, error: Challenger played: ${chalPlay}, Victim played ${victPlay}`, ephemeral: true, components: [] })
+					break
 				}
-				else {
-					await interaction.reply({ content: `Nobody won, error: Challenger played: ${chalPlay}, Victim played ${victPlay}`, ephemeral: true })
-					return await interaction.update({ content: `Nobody won, error: Challenger played: ${chalPlay}, Victim played ${victPlay}`, ephemeral: true, components: [] })
-				}
-			}
-			else if (chalPlay === 'paper') {
-				if (victPlay === 'rock') {
-					await interaction.reply({ content: 'The challenger won the game, Paper Covers Rock' })
-					return await interaction.update({ content: 'Game has ended, Challenger Won', components: [] })
-				}
-				else if (victPlay === 'paper') {
-					await interaction.reply({ content: 'The game is a draw, both players chose Paper' })
-					return await interaction.update({ content: 'Game has ended, Draw', components: [] })
-				}
-				else if (victPlay === 'scissors') {
-					await interaction.reply({ content: 'The victim won the game, Scissors Cuts Paper' })
-					return await interaction.update({ content: 'Game has ended, Victim Won', components: [] })
-				}
-				else if (victPlay === 'lizard') {
-					await interaction.reply({ content: 'The victim won the game, Lizard Eats Paper' })
-					return await interaction.update({ content: 'Game has ended, Victim Won', components: [] })
-				}
-				else if (victPlay === 'spock') {
-					await interaction.reply({ content: 'The challenger won the game, Paper Disproves Spock' })
-					return await interaction.update({ content: 'Game has ended, Challenger Won', components: [] })
-				}
-				else {
-					await interaction.reply({ content: `Nobody won, error: Challenger played: ${chalPlay}, Victim played ${victPlay}`, ephemeral: true })
-					return await interaction.update({ content: `Nobody won, error: Challenger played: ${chalPlay}, Victim played ${victPlay}`, ephemeral: true, components: [] })
-				}
-			}
-			else if (chalPlay === 'scissors') {
-				if (victPlay === 'rock') {
-					await interaction.reply({ content: 'The victim won the game, Rock Smashes Scissors' })
-					return await interaction.update({ content: 'Game has ended, Victim Won', components: [] })
-				}
-				else if (victPlay === 'paper') {
-					await interaction.reply({ content: 'The challenger won the game, Scissors Cuts Paper' })
-					return await interaction.update({ content: 'Game has ended, Challenger Won', components: [] })
-				}
-				else if (victPlay === 'scissors') {
-					await interaction.reply({ content: 'The game is a draw, both players chose Scissors' })
-					return await interaction.update({ content: 'Game has ended, Draw', components: [] })
-				}
-				else if (victPlay === 'lizard') {
-					await interaction.reply({ content: 'The challenger won the game, Scissors Decapitates Lizard' })
-					return await interaction.update({ content: 'Game has ended, Challenger Won', components: [] })
-				}
-				else if (victPlay === 'spock') {
-					await interaction.reply({ content: 'The victim won the game, Spock Smashes Scissors' })
-					return await interaction.update({ content: 'Game has ended, Victim Won', components: [] })
-				}
-				else {
-					await interaction.reply({ content: `Nobody won, error: Challenger played: ${chalPlay}, Victim played ${victPlay}`, ephemeral: true })
-					return await interaction.update({ content: `Nobody won, error: Challenger played: ${chalPlay}, Victim played ${victPlay}`, ephemeral: true, components: [] })
-				}
-			}
-			else if (chalPlay === 'lizard') {
-				if (victPlay === 'rock') {
-					await interaction.reply({ content: 'The victim won the game, Rock Crushes Lizard' })
-					return await interaction.update({ content: 'Game has ended, Victim Won', components: [] })
-				}
-				else if (victPlay === 'paper') {
-					await interaction.reply({ content: 'The challenger won the game, Lizard Eats Paper' })
-					return await interaction.update({ content: 'Game has ended, Challenger Won', components: [] })
-				}
-				else if (victPlay === 'scissors') {
-					await interaction.reply({ content: 'The victim won the game, Scissors Decapitates Lizard' })
-					return await interaction.update({ content: 'Game has ended, Victim Won', components: [] })
-				}
-				else if (victPlay === 'lizard') {
-					await interaction.reply({ content: 'The game is a draw, both players chose Lizard' })
-					return await interaction.update({ content: 'Game has ended, Draw', components: [] })
-				}
-				else if (victPlay === 'spock') {
-					await interaction.reply({ content: 'The challenger won the game, Lizard Poisons Spock' })
-					return await interaction.update({ content: 'Game has ended, Challenger Won', components: [] })
-				}
-				else {
-					await interaction.reply({ content: `Nobody won, error: Challenger played: ${chalPlay}, Victim played ${victPlay}`, ephemeral: true })
-					return await interaction.update({ content: `Nobody won, error: Challenger played: ${chalPlay}, Victim played ${victPlay}`, ephemeral: true, components: [] })
-				}
-			}
-			else if (chalPlay === 'spock') {
-				if (victPlay === 'rock') {
-					await interaction.reply({ content: 'The challenger won the game, Spock vaporizes rock' })
-					return await interaction.update({ content: 'Game has ended, Challenger Won', components: [] })
-				}
-				else if (victPlay === 'paper') {
-					await interaction.reply({ content: 'The victim won the game, Paper Disproves Spock' })
-					return await interaction.update({ content: 'Game has ended, Victim Won', components: [] })
-				}
-				else if (victPlay === 'scissors') {
-					await interaction.reply({ content: 'The challenger won the game, Spock Smashes Scissors' })
-					return await interaction.update({ content: 'Game has ended, Challenger Won', components: [] })
-				}
-				else if (victPlay === 'lizard') {
-					await interaction.reply({ content: 'The victim won the game, Lizard Poisons Spock' })
-					return await interaction.update({ content: 'Game has ended, Victim Won', components: [] })
-				}
-				else if (victPlay === 'spock') {
-					await interaction.reply({ content: 'The game is a draw, both players chose Spock' })
-					return await interaction.update({ content: 'Game has ended, Draw', components: [] })
-				}
-				else {
-					await interaction.reply({ content: `Nobody won, error: Challenger played: ${chalPlay}, Victim played ${victPlay}`, ephemeral: true })
-					return await interaction.update({ content: `Nobody won, error: Challenger played: ${chalPlay}, Victim played ${victPlay}`, ephemeral: true, components: [] })
-				}
-			}
-			else {
-				await interaction.reply({ content: `Nobody won, error: Challenger played: ${chalPlay}, Victim played ${victPlay}`, ephemeral: true })
-				return await interaction.update({ content: `Nobody won, error: Challenger played: ${chalPlay}, Victim played ${victPlay}`, ephemeral: true, components: [] })
+				break
+			default:
+				await interaction.update({ content: `Nobody won, error: Challenger played: ${chalPlay}, Victim played ${victPlay}`, ephemeral: true, components: [] })
+				break
 			}
 		}
 		else {

@@ -12,9 +12,9 @@ for (const file of commandFiles) {
 	commands.push(command.data.toJSON())
 }
 
-const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
+const rest = new REST({ version: '9' }).setToken(process.env.TOKEN)
 
-(async () => {
+const activate = async () => {
 	try {
 		console.log('Started refreshing guild (/) commands.')
 		await rest.put(
@@ -32,4 +32,5 @@ const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
 	catch (err) {
 		console.error(err)
 	}
-})()
+}
+activate()
