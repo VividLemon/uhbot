@@ -65,8 +65,15 @@ typings/
 # Output of 'npm pack'
 *.tgz
 
-# Yarn Integrity file
+# Yarn
 .yarn-integrity
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 
 # dotenv environment variables file
 .env
@@ -112,3 +119,7 @@ tmp/*
 
 #Sqlite
 sqlite/*.sqlite
+
+#Dockerfile
+Dockerfile
+
