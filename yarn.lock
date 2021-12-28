@@ -182,13 +182,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:^4":
-  version: 4.14.178
-  resolution: "@types/lodash@npm:4.14.178"
-  checksum: a69a04a60bfc5257c3130a554b4efa0c383f0141b7b3db8ab7cf07ad2a46ea085fce66d0242da41da7e5647b133d5dfb2c15add9cbed8d7fef955e4a1e5b3128
-  languageName: node
-  linkType: hard
-
 "@types/node-fetch@npm:^2.5.12":
   version: 2.5.12
   resolution: "@types/node-fetch@npm:2.5.12"
@@ -3136,7 +3129,6 @@ __metadata:
     "@discordjs/builders": ^0.10.0
     "@discordjs/rest": ^0.2.0-canary.0
     "@keyv/sqlite": ^2.0.3
-    "@types/lodash": ^4
     discord-api-types: ^0.26.0
     discord.js: ^13.4.0
     dotenv: ^10.0.0

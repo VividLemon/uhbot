@@ -1,0 +1,20 @@
+FROM node:16
+
+WORKDIR /app
+
+COPY package*.json ./
+
+COPY . .
+
+RUN yarn install
+
+ENV TOKEN={string} discord.js apitoken
+ENV GUILD={number} guild id
+ENV CLIENT={number} bot client id
+ENV MAX_SAFE_EXPLODE={number} maximum safe explodes -- perf
+ENV MAX_SAFE_REROLLS={number} maximum saffe rerolls -- perf
+ENV MAX_SAFE_ARGS={number} maximum safe args --perf
+
+RUN ["yarn", "node ./src/deploy-commands.js"]
+
+CMD [ "yarn", "start" ]

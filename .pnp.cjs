@@ -38,7 +38,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@discordjs/builders", "npm:0.10.0"],
             ["@discordjs/rest", "npm:0.2.0-canary.0"],
             ["@keyv/sqlite", "npm:2.0.3"],
-            ["@types/lodash", "npm:4.14.178"],
             ["discord-api-types", "npm:0.26.0"],
             ["discord.js", "npm:13.4.0"],
             ["dotenv", "npm:10.0.0"],
@@ -247,15 +246,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@types/keyv", "npm:3.1.3"],
             ["@types/node", "npm:17.0.5"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["@types/lodash", [
-        ["npm:4.14.178", {
-          "packageLocation": "./.yarn/cache/@types-lodash-npm-4.14.178-5433b9ed68-a69a04a60b.zip/node_modules/@types/lodash/",
-          "packageDependencies": [
-            ["@types/lodash", "npm:4.14.178"]
           ],
           "linkType": "HARD",
         }]
@@ -3602,7 +3592,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@discordjs/builders", "npm:0.10.0"],
             ["@discordjs/rest", "npm:0.2.0-canary.0"],
             ["@keyv/sqlite", "npm:2.0.3"],
-            ["@types/lodash", "npm:4.14.178"],
             ["discord-api-types", "npm:0.26.0"],
             ["discord.js", "npm:13.4.0"],
             ["dotenv", "npm:10.0.0"],
