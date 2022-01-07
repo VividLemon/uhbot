@@ -49,6 +49,7 @@ module.exports = {
 		'space-infix-ops': 'error',
 		'space-unary-ops': 'error',
 		'spaced-comment': 'error',
-		yoda: 'error'
+		yoda: 'error', 
+		"yoda": 'error'
 	}
 }
