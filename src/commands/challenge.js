@@ -66,8 +66,7 @@ module.exports = {
 		const challenger = interaction.message.mentions[1]
 		const victim = interaction.message.mentions[0]
 		const challengeStr = `challenge-${challenger.id}-${victim.id}`
-		// TODO player can play multiple times
-		// Is player check
+
 		if (!(interaction.user.id === challenger.id || interaction.user.id === victim.id)) return await interaction.reply({ content: 'This isn\'t meant for you!', ephemeral: true })
 
 		// End game check
@@ -221,8 +220,6 @@ module.exports = {
 		else {
 			// Set role to db
 			await keyv.set(challengeStr, challenge)
-			// TODO since they can play multiple times, allow them to update, but don't update interaction
-			console.log(interaction.user.id === challenger.id && challenge.challengerPlayed != null)
 			if((interaction.user.id === challenger.id && challenge.challengerPlayed != null) || (interaction.user.id === victim.id && challenge.challengerPlayed != null)) return interaction.update({content: ''})
 			return await interaction.update({ content: `${interaction.message.content}\n\n${interaction.user.toString()} has played!` })
 		}

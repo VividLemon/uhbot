@@ -24,6 +24,7 @@ module.exports = {
 		const modifiers = interaction.options.getString('modifiers') ?? ''
 		const values = interaction.options.getString('values')
 		const nums = values.split(/\s+/).filter((element) => !isNaN(element))
+		// TODO once docker updates and (hopefully, uninstall may be required fml) fixes buildx, buildx for the platforms, then check if rpi pulls the new image
 		if (values === '') {
 			return await interaction.reply({ content: 'Value cannot be empty', ephemeral: true })
 		}
