@@ -35,7 +35,7 @@ module.exports = {
 				return await interaction.reply({ content, ephemeral })
 			}
 			catch (err) {
-				console.error(err, interaction)
+				console.error({ error: err, interaction })
 				return await interaction.reply({ content: `Error: ${err.message}`, ephemeral: true })
 			}
 		}

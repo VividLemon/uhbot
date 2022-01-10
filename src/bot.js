@@ -12,7 +12,7 @@ for (const file of commandFiles) {
 	client.commands.set(command.data.name, command)
 }
 
-client.once('ready',() => {
+client.once('ready', () => {
 	client.user.setActivity('/ slash commands', { type: 'WATCHING' })
 	console.log('Ready')
 })
@@ -24,7 +24,7 @@ client.on('interactionCreate', async (interaction) => {
 		await command.execute(interaction)
 	}
 	catch (err) {
-		console.error(err, interaction)
+		console.error({ error: err, interaction })
 		return await interaction.reply({ content: 'There was an error while trying to execute this command\nError was logged', ephemeral: true })
 	}
 })
@@ -36,7 +36,7 @@ client.on('interactionCreate', async (interaction) => {
 		await command.buttonExecute(interaction)
 	}
 	catch (err) {
-		console.error(err, interaction)
+		console.error({ error: err, interaction })
 		return await interaction.reply({ content: 'There was an error while trying to execute this command\nError was logged', ephemeral: true })
 	}
 })

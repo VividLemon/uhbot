@@ -29,7 +29,7 @@ module.exports = {
 		}
 		else {
 			if (await keyv.get(`challenge-${interaction.user.id}-${victim.id}`) != null) {
-				return interaction.reply({ content: 'An outstanding challenge already exists.\nFinish that one first!', ephemeral: true })
+				return await interaction.reply({ content: 'An outstanding challenge already exists.\nFinish that one first!', ephemeral: true })
 			}
 			const time = new Date(Date.now() + 1800000)
 			keyv.set(`challenge-${interaction.user.id}-${victim.id}`,
@@ -90,7 +90,6 @@ module.exports = {
 			keyv.delete(challengeStr)
 			return await interaction.update({ content: 'Time has expired! Create a new one to try again', ephemeral: true, components: [] })
 		}
-
 
 		// Player role check
 		interaction.user.id === challenger.id ? challenge.challengerPlayed = interaction.customId : challenge.victimPlayed = interaction.customId
@@ -220,7 +219,9 @@ module.exports = {
 		else {
 			// Set role to db
 			await keyv.set(challengeStr, challenge)
-			if((interaction.user.id === challenger.id && challenge.challengerPlayed != null) || (interaction.user.id === victim.id && challenge.challengerPlayed != null)) return interaction.update({content: ''})
+			if ((interaction.user.id === challenger.id && challenge.challengerPlayed != null) || (interaction.user.id === victim.id && challenge.challengerPlayed != null)) {
+				return await interaction.reply({ content: 'Successfully updated', ephemeral: true })
+			}
 			return await interaction.update({ content: `${interaction.message.content}\n\n${interaction.user.toString()} has played!` })
 		}
 	}

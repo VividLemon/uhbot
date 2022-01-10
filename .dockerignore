@@ -9,3 +9,6 @@ node_modules
 .docker.example
 .eslintrc.js
 .env
+#tmp
+tmp/*
+!tmp/README.md

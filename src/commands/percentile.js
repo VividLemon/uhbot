@@ -53,14 +53,14 @@ module.exports = {
 				return await interaction.reply({ content: `The total is ${content.total.toLocaleString()}`, ephemeral, files: [mFile] })
 			}
 			catch (err) {
-				console.error(err, interaction)
+				console.error({ error: err, interaction })
 				return await interaction.reply({ content: `Error: ${err.message}`, ephemeral: true })
 			}
 			finally {
 				if (gFile != null) {
 					unlink(gFile)
 						.catch((err) => {
-							console.error(err, interaction)
+							console.error({ error: err, interaction })
 						})
 				}
 				// const path = join(__dirname, '../', '/tmp')
