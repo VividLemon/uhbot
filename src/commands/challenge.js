@@ -65,9 +65,18 @@ module.exports = {
 	async buttonExecute(interaction) {
 		const challenger = interaction.message.mentions[1]
 		const victim = interaction.message.mentions[0]
+
+		if (challenger == null || victim == null) {
+			// Since challenge string is built yet, and there is no capability of getting their ids, we can't remove the keyv row.
+			// It will require getting some information about the interaction. So requires testing. For now, it's fine.
+			return await interaction.update({ content: 'Game ended by default. User not available', ephemeral: true, components: [] })
+		}
+
 		const challengeStr = `challenge-${challenger.id}-${victim.id}`
 
-		if (!(interaction.user.id === challenger.id || interaction.user.id === victim.id)) return await interaction.reply({ content: 'This isn\'t meant for you!', ephemeral: true })
+		if (!(interaction.user.id === challenger.id || interaction.user.id === victim.id)) {
+			return await interaction.reply({ content: 'This isn\'t meant for you!', ephemeral: true })
+		}
 
 		// End game check
 		if (interaction.customId === 'end') {

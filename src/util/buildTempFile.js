@@ -1,5 +1,6 @@
 const { randomUUID } = require('crypto')
 const { writeFile } = require('fs/promises')
+const { tmpdir } = require('os')
 const { join } = require('path')
 /**
  * @async
@@ -7,7 +8,7 @@ const { join } = require('path')
  * @returns {string} path to file
  */
 module.exports = async (content) => {
-	const pathToFile = join(__dirname, '../', '/tmp', `${randomUUID()}.tmp.json`)
-	await writeFile(pathToFile, content)
-	return pathToFile
+	const path = join(tmpdir(), `${randomUUID()}.json`)
+	await writeFile(path, content)
+	return path
 }
