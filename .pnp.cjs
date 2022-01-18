@@ -40,7 +40,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@keyv/sqlite", "npm:2.1.0"],
             ["discord-api-types", "npm:0.26.1"],
             ["discord.js", "npm:13.6.0"],
-            ["dotenv", "npm:10.0.0"],
+            ["dotenv", "npm:14.2.0"],
             ["eslint", "npm:7.32.0"],
             ["eslint-config-standard", "virtual:bdd89d7b1b642b48105894f669a2440dd65e582d4a9902dd44920b68113a698201e8cf237efd717b2236ce62354a44a580c89067c1ea3b4072f9c87c37d6ebc8#npm:16.0.3"],
             ["eslint-plugin-import", "virtual:bdd89d7b1b642b48105894f669a2440dd65e582d4a9902dd44920b68113a698201e8cf237efd717b2236ce62354a44a580c89067c1ea3b4072f9c87c37d6ebc8#npm:2.25.4"],
@@ -790,10 +790,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["chokidar", [
-        ["npm:3.5.2", {
-          "packageLocation": "./.yarn/cache/chokidar-npm-3.5.2-6752340fec-d1fda32fcd.zip/node_modules/chokidar/",
+        ["npm:3.5.3", {
+          "packageLocation": "./.yarn/cache/chokidar-npm-3.5.3-c5f9b0a56a-b49fcde401.zip/node_modules/chokidar/",
           "packageDependencies": [
-            ["chokidar", "npm:3.5.2"],
+            ["chokidar", "npm:3.5.3"],
             ["anymatch", "npm:3.1.2"],
             ["braces", "npm:3.0.2"],
             ["fsevents", "patch:fsevents@npm%3A2.3.2#~builtin<compat/fsevents>::version=2.3.2&hash=18f3a7"],
@@ -1226,10 +1226,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["dotenv", [
-        ["npm:10.0.0", {
-          "packageLocation": "./.yarn/cache/dotenv-npm-10.0.0-36b272df25-f412c5fe8c.zip/node_modules/dotenv/",
+        ["npm:14.2.0", {
+          "packageLocation": "./.yarn/cache/dotenv-npm-14.2.0-b237345d26-85a0e44918.zip/node_modules/dotenv/",
           "packageDependencies": [
-            ["dotenv", "npm:10.0.0"]
+            ["dotenv", "npm:14.2.0"]
           ],
           "linkType": "HARD",
         }]
@@ -3196,7 +3196,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/unplugged/nodemon-npm-2.0.15-5e88e7aef5/node_modules/nodemon/",
           "packageDependencies": [
             ["nodemon", "npm:2.0.15"],
-            ["chokidar", "npm:3.5.2"],
+            ["chokidar", "npm:3.5.3"],
             ["debug", "virtual:5e88e7aef540459ed10e9f06791cff75f35e8e44e625132fefff7246f500bd5b319d818390ce1930a4b11fbbce9102b75ea690c8a75bc6e0969fe6dd59e3c283#npm:3.2.7"],
             ["ignore-by-default", "npm:1.0.1"],
             ["minimatch", "npm:3.0.4"],
@@ -4436,7 +4436,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@keyv/sqlite", "npm:2.1.0"],
             ["discord-api-types", "npm:0.26.1"],
             ["discord.js", "npm:13.6.0"],
-            ["dotenv", "npm:10.0.0"],
+            ["dotenv", "npm:14.2.0"],
             ["eslint", "npm:7.32.0"],
             ["eslint-config-standard", "virtual:bdd89d7b1b642b48105894f669a2440dd65e582d4a9902dd44920b68113a698201e8cf237efd717b2236ce62354a44a580c89067c1ea3b4072f9c87c37d6ebc8#npm:16.0.3"],
             ["eslint-plugin-import", "virtual:bdd89d7b1b642b48105894f669a2440dd65e582d4a9902dd44920b68113a698201e8cf237efd717b2236ce62354a44a580c89067c1ea3b4072f9c87c37d6ebc8#npm:2.25.4"],
