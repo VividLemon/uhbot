@@ -53,7 +53,7 @@ module.exports = {
 				else {
 					delete obj.modifiers
 				}
-				const file = await buildTempFile(JSON.stringify(obj, null, 2))
+				const file = buildTempFile(JSON.stringify(obj, null, 2))
 				gFile = file
 				const mFile = new MessageAttachment(file)
 				return await interaction.reply({ content: `The total is ${obj.total.toLocaleString()}`, ephemeral, files: [mFile] })

@@ -59,7 +59,7 @@ module.exports = {
 				}
 				obj.total = Number.parseFloat(obj.total.toFixed(3))
 				obj.value = Number.parseFloat(obj.value.toFixed(3))
-				const file = await buildTempFile(JSON.stringify(obj, null, 2))
+				const file = buildTempFile(JSON.stringify(obj, null, 2))
 				gFile = file
 				const mFile = new MessageAttachment(file)
 				return await interaction.reply({ content: `The total is ${obj.total.toLocaleString()}`, ephemeral, files: [mFile] })

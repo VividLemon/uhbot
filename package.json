@@ -5,6 +5,7 @@
     "email": "kwiksilver344@gmail.com",
     "url": "https://github.com/kwiksilver3441/uhbot"
   },
+  "version": "1.0.1",
   "license": "MIT",
   "packageManager": "yarn@3.1.1",
   "scripts": {

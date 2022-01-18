@@ -53,7 +53,7 @@ module.exports = {
 			try {
 				const obj = await roll({ size, number: 1, rerolls, explode, diceModifiers })
 				const content = await rollsWriteContent(obj, modifiers)
-				const file = await buildTempFile(JSON.stringify(content, null, 2))
+				const file = buildTempFile(JSON.stringify(content, null, 2))
 				gFile = file
 				const mFile = new MessageAttachment(file)
 				return await interaction.reply({ content: `The total is ${content.total.toLocaleString()}`, ephemeral, files: [mFile] })
