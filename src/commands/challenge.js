@@ -30,7 +30,6 @@ module.exports = {
 		}
 		else {
 			const chall = await keyv.get(`challenge-${interaction.user.id}-${victim.id}`)
-			console.log(chall)
 			if (chall != null) {
 				return await interaction.reply({ content: i18n.__('challengeOutstanding'), ephemeral: true })
 			}
@@ -227,8 +226,6 @@ module.exports = {
 		else {
 			// Set role to db
 			await keyv.set(challengeStr, copy, Number.parseInt(process.env.CHALLENGE_EXPIRES_MS))
-			console.log(challenge)
-			console.log(copy)
 			if ((interaction.user.id === challenger.id && challenge.challengerPlayed == null) || (interaction.user.id === victim.id && challenge.victimPlayed == null)) {
 				return await interaction.update({ content: `${interaction.message.content}\n${interaction.user.toString()} ${i18n.__('hasPlayed')}!` })
 			}
