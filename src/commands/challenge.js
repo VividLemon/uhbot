@@ -43,17 +43,17 @@ module.exports = {
 			const row = (expanded)
 				? new MessageActionRow()
 					.addComponents(
-						new MessageButton().setCustomId('rock').setLabel('rock').setStyle('PRIMARY'),
-						new MessageButton().setCustomId('paper').setLabel('paper').setStyle('SECONDARY'),
-						new MessageButton().setCustomId('scissors').setLabel('scissors').setStyle('SUCCESS'),
-						new MessageButton().setCustomId('lizard').setLabel('lizard').setStyle('DANGER'),
+						new MessageButton().setCustomId('rock').setLabel(i18n.__('rock')).setStyle('PRIMARY'),
+						new MessageButton().setCustomId('paper').setLabel(i18n.__('paper')).setStyle('SECONDARY'),
+						new MessageButton().setCustomId('scissors').setLabel(i18n.__('scissors')).setStyle('SUCCESS'),
+						new MessageButton().setCustomId('lizard').setLabel(i18n.__('lizard')).setStyle('DANGER'),
 						new MessageButton().setCustomId('spock').setLabel('Spock').setStyle('PRIMARY')
 					)
 				: new MessageActionRow()
 					.addComponents(
-						new MessageButton().setCustomId('rock').setLabel('rock').setStyle('PRIMARY'),
-						new MessageButton().setCustomId('paper').setLabel('paper').setStyle('SECONDARY'),
-						new MessageButton().setCustomId('scissors').setLabel('scissors').setStyle('SUCCESS')
+						new MessageButton().setCustomId('rock').setLabel(i18n.__('rock')).setStyle('PRIMARY'),
+						new MessageButton().setCustomId('paper').setLabel(i18n.__('paper')).setStyle('SECONDARY'),
+						new MessageButton().setCustomId('scissors').setLabel(i18n.__('scissors')).setStyle('SUCCESS')
 					)
 			const endRow = new MessageActionRow()
 				.addComponents(
