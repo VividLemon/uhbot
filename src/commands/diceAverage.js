@@ -3,6 +3,7 @@ const addModifiers = require('../util/addModifiers')
 const buildTempFile = require('../util/buildTempFile')
 const { unlink } = require('fs/promises')
 const { MessageAttachment } = require('discord.js')
+const { i18n } = require('../bot')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -33,16 +34,16 @@ module.exports = {
 		const modifiers = interaction.options.getString('modifiers') ?? ''
 		const rerolls = interaction.options.getInteger('rerolls') ?? 1
 		if (size < 1) {
-			return await interaction.reply({ content: 'Size cannot be negative or zero', ephemeral: true })
+			return await interaction.reply({ content: i18n.__('sizeNegativeOrZero'), ephemeral: true })
 		}
 		else if (number < 1) {
-			return await interaction.reply({ content: 'Number cannot be negative or zero', ephemeral: true })
+			return await interaction.reply({ content: i18n.__('numberNegativeOrZero'), ephemeral: true })
 		}
 		else if (rerolls < 1) {
 			return await interaction.reply({ content: 'Rerolls cannot be negative or zero', ephemeral: true })
 		}
 		else if (rerolls >= Math.floor(Number.parseInt(process.env.MAX_SAFE_REROLLS))) {
-			return await interaction.reply({ content: `Rerolls should be less than ${Math.floor(Number.parseInt(process.env.MAX_SAFE_REROLLS))}`, ephemeral: true })
+			return await interaction.reply({ content: i18n.__('rerollsLessThan', { value: Math.floor(Number.parseInt(process.env.MAX_SAFE_REROLLS)) }), ephemeral: true })
 		}
 		else {
 			try {
@@ -59,14 +60,14 @@ module.exports = {
 				else {
 					delete obj.modifiers
 				}
-				const file = buildTempFile(JSON.stringify(obj, null, 2))
+				const file = await buildTempFile(JSON.stringify(obj, null, 2))
 				gFile = file
 				const mFile = new MessageAttachment(file)
-				return await interaction.reply({ content: `The total is ${obj.total.toLocaleString()}`, ephemeral, files: [mFile] })
+				return await interaction.reply({ content: i18n.__('totalIs', { value: obj.total.toLocaleString(interaction.locale) }), ephemeral, files: [mFile] })
 			}
 			catch (err) {
 				console.error({ error: err, interaction })
-				return await interaction.reply({ content: `Error: ${err.message}`, ephemeral: true })
+				return await interaction.reply({ content: `${i18n.__('error')}: ${err.message}`, ephemeral: true })
 			}
 			finally {
 				if (gFile != null) {

@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
+const { i18n } = require('../bot')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -10,7 +11,7 @@ module.exports = {
 		}
 		catch (err) {
 			console.error({ error: err, interaction })
-			return await interaction.reply({ content: `Error: ${err.message}`, ephemeral: true })
+			return await interaction.reply({ content: `${i18n.__('error')}: ${err.message}`, ephemeral: true })
 		}
 	}
 }

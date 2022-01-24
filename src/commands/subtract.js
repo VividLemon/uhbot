@@ -3,6 +3,7 @@ const { unlink } = require('fs/promises')
 const addModifiers = require('../util/addModifiers')
 const buildTempFile = require('../util/buildTempFile')
 const { MessageAttachment } = require('discord.js')
+const { i18n } = require('../bot')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -25,14 +26,14 @@ module.exports = {
 		const values = interaction.options.getString('values')
 		const nums = values.split(/\s+/).filter((element) => !isNaN(element))
 		if (values === '') {
-			return await interaction.reply({ content: 'Value cannot be empty', ephemeral: true })
+			return await interaction.reply({ content: i18n.__('valueNotEmpty'), ephemeral: true })
 		}
 		else if (!nums.length) {
-			return await interaction.reply({ content: 'Values contains no numbers', ephemeral: true })
+			return await interaction.reply({ content: i18n.__('valueYesNumbers'), ephemeral: true })
 		}
 		else if (nums.length > Number.parseInt(process.env.MAX_SAFE_ARGS)) {
 			console.warn(interaction)
-			return await interaction.reply({ content: 'Value is over the maximum safe arguments limit. Why are you using this many arguments?', ephemeral: true })
+			return await interaction.reply({ content: i18n.__('valueOverMaxSafeArgs'), ephemeral: true })
 		}
 		else {
 			try {
@@ -54,14 +55,14 @@ module.exports = {
 				else {
 					delete obj.modifiers
 				}
-				const file = buildTempFile(JSON.stringify(obj, null, 2))
+				const file = await buildTempFile(JSON.stringify(obj, null, 2))
 				gFile = file
 				const mFile = new MessageAttachment(file)
-				return await interaction.reply({ content: `The total is ${obj.total.toLocaleString()}`, ephemeral, files: [mFile] })
+				return await interaction.reply({ content: i18n.__('totalIs', { value: obj.total.toLocaleString(interaction.locale) }), ephemeral, files: [mFile] })
 			}
 			catch (err) {
 				console.error({ error: err, interaction })
-				return await interaction.reply({ content: `Error: ${err.message}`, ephemeral: true })
+				return await interaction.reply({ content: `${i18n.__('error')}: ${err.message}`, ephemeral: true })
 			}
 			finally {
 				if (gFile != null) {

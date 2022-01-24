@@ -5,7 +5,7 @@ const { join } = require('path')
 /**
  * @async
  * @param {string} content
- * @returns {string} path to file
+ * @returns {Promise<string>} path to file
  */
 module.exports = async (content) => {
 	const path = join(tmpdir(), `${randomUUID()}.json`)

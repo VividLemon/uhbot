@@ -4,6 +4,7 @@ const roll = require('../util/roll')
 const rollsWriteContent = require('../util/rollsWriteContent')
 const { unlink } = require('fs/promises')
 const { MessageAttachment } = require('discord.js')
+const { i18n } = require('../bot')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -32,29 +33,29 @@ module.exports = {
 		const diceModifiers = interaction.options.getString('dice-modifiers') ?? ''
 		const rerolls = interaction.options.getInteger('rerolls') ?? 1
 		if (explode < 1) {
-			return await interaction.reply({ content: 'Explode cannot be negative or zero', ephemeral: true })
+			return await interaction.reply({ content: i18n.__('explodeNotZeroOrNegative'), ephemeral: true })
 		}
 		else if (explode > 101) {
-			return await interaction.reply({ content: 'Explode cannot be greater than what\'s possible on a 100 sided die', ephemeral: true })
+			return await interaction.reply({ content: i18n.__('explodeOverPercentile'), ephemeral: true })
 		}
 		else if (rerolls < 1) {
-			return await interaction.reply({ content: 'Rerolls cannot be negative or zero', ephemeral: true })
+			return await interaction.reply({ content: i18n.__('rerollsNegativeOrZero'), ephemeral: true })
 		}
 		else if (rerolls >= Math.floor(Number.parseInt(process.env.MAX_SAFE_REROLLS) / 10)) {
-			return await interaction.reply({ content: `Rerolls should be less than ${Math.floor(Number.parseInt(process.env.MAX_SAFE_REROLLS) / 10)}`, ephemeral: true })
+			return await interaction.reply({ content: i18n.__('rerollsLessThan', { value: Math.floor(Number.parseInt(process.env.MAX_SAFE_REROLLS) / 10) }), ephemeral: true })
 		}
 		else {
 			try {
 				const obj = await roll({ size: 100, number: 1, rerolls, explode, diceModifiers })
 				const content = await rollsWriteContent(obj, modifiers)
-				const file = buildTempFile(JSON.stringify(content, null, 2))
+				const file = await buildTempFile(JSON.stringify(content, null, 2))
 				gFile = file
 				const mFile = new MessageAttachment(file)
-				return await interaction.reply({ content: `The total is ${content.total.toLocaleString()}`, ephemeral, files: [mFile] })
+				return await interaction.reply({ content: i18n.__('totalIs', { value: content.total.toLocaleString(interaction.locale) }), ephemeral, files: [mFile] })
 			}
 			catch (err) {
 				console.error({ error: err, interaction })
-				return await interaction.reply({ content: `Error: ${err.message}`, ephemeral: true })
+				return await interaction.reply({ content: `${i18n.__('error')}: ${err.message}`, ephemeral: true })
 			}
 			finally {
 				if (gFile != null) {
@@ -63,8 +64,6 @@ module.exports = {
 							console.error({ error: err, interaction })
 						})
 				}
-				// const path = join(__dirname, '../', '/tmp')
-				// readdir(path).then((resp) => resp.forEach((file) => unlink(join(path, file))))
 			}
 		}
 	}

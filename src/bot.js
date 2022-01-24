@@ -1,6 +1,18 @@
 const { Client, Intents, Collection } = require('discord.js')
 const { readdirSync } = require('fs')
 const { join } = require('path')
+const { I18n } = require('i18n')
+const getLang = require('./util/getLang')
+
+const i18n = new I18n({
+	locales: ['en', 'es'],
+	directory: join(__dirname, 'lang'),
+	retryInDefaultLocale: true
+})
+
+module.exports = {
+	i18n
+}
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] })
 
@@ -20,6 +32,7 @@ client.once('ready', () => {
 client.on('interactionCreate', async (interaction) => {
 	if (!interaction.isCommand()) return
 	const command = client.commands.get(interaction.commandName)
+	i18n.setLocale(await getLang(interaction.locale))
 	try {
 		await command.execute(interaction)
 	}
@@ -42,3 +55,4 @@ client.on('interactionCreate', async (interaction) => {
 })
 
 client.login(process.env.TOKEN)
+

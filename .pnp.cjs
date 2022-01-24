@@ -38,6 +38,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@discordjs/builders", "npm:0.11.0"],
             ["@discordjs/rest", "npm:0.2.0-canary.0"],
             ["@keyv/sqlite", "npm:2.1.0"],
+            ["@types/i18n", "npm:0.13.2"],
             ["discord-api-types", "npm:0.26.1"],
             ["discord.js", "npm:13.6.0"],
             ["dotenv", "npm:14.2.0"],
@@ -46,6 +47,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-import", "virtual:bdd89d7b1b642b48105894f669a2440dd65e582d4a9902dd44920b68113a698201e8cf237efd717b2236ce62354a44a580c89067c1ea3b4072f9c87c37d6ebc8#npm:2.25.4"],
             ["eslint-plugin-node", "virtual:bdd89d7b1b642b48105894f669a2440dd65e582d4a9902dd44920b68113a698201e8cf237efd717b2236ce62354a44a580c89067c1ea3b4072f9c87c37d6ebc8#npm:11.1.0"],
             ["eslint-plugin-promise", "virtual:bdd89d7b1b642b48105894f669a2440dd65e582d4a9902dd44920b68113a698201e8cf237efd717b2236ce62354a44a580c89067c1ea3b4072f9c87c37d6ebc8#npm:5.2.0"],
+            ["i18n", "npm:0.13.4"],
             ["keyv", "npm:4.0.5"],
             ["lodash", "npm:4.17.21"],
             ["nodemon", "npm:2.0.15"]
@@ -260,6 +262,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@tootallnate-once-npm-1.1.2-0517220057-e1fb1bbbc1.zip/node_modules/@tootallnate/once/",
           "packageDependencies": [
             ["@tootallnate/once", "npm:1.1.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/i18n", [
+        ["npm:0.13.2", {
+          "packageLocation": "./.yarn/cache/@types-i18n-npm-0.13.2-209dcdafdb-dc4f19402b.zip/node_modules/@types/i18n/",
+          "packageDependencies": [
+            ["@types/i18n", "npm:0.13.2"]
           ],
           "linkType": "HARD",
         }]
@@ -2211,6 +2222,21 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["i18n", [
+        ["npm:0.13.4", {
+          "packageLocation": "./.yarn/cache/i18n-npm-0.13.4-c7389c1aed-ea4edf04f2.zip/node_modules/i18n/",
+          "packageDependencies": [
+            ["i18n", "npm:0.13.4"],
+            ["debug", "virtual:e5e72b8ce4b39c9ab6a47d8d08d725dccb716bd95217c12bbc98e5d3a6b7a9c0525366241540ebcfaa8e5f425c3ad207e651c3544a3bc8b2bdf38c619d2d3045#npm:4.3.3"],
+            ["make-plural", "npm:7.0.0"],
+            ["math-interval-parser", "npm:2.0.1"],
+            ["messageformat", "npm:2.3.0"],
+            ["mustache", "npm:4.2.0"],
+            ["sprintf-js", "npm:1.1.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["iconv-lite", [
         ["npm:0.4.24", {
           "packageLocation": "./.yarn/cache/iconv-lite-npm-0.4.24-c5c4ac6695-bd9f120f5a.zip/node_modules/iconv-lite/",
@@ -2893,6 +2919,62 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["make-plural", [
+        ["npm:4.3.0", {
+          "packageLocation": "./.yarn/cache/make-plural-npm-4.3.0-a012b68a9f-1702556e98.zip/node_modules/make-plural/",
+          "packageDependencies": [
+            ["make-plural", "npm:4.3.0"],
+            ["minimist", "npm:1.2.5"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:7.0.0", {
+          "packageLocation": "./.yarn/cache/make-plural-npm-7.0.0-00e5794265-6dc2069675.zip/node_modules/make-plural/",
+          "packageDependencies": [
+            ["make-plural", "npm:7.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["math-interval-parser", [
+        ["npm:2.0.1", {
+          "packageLocation": "./.yarn/cache/math-interval-parser-npm-2.0.1-332d42b62f-aa7111a337.zip/node_modules/math-interval-parser/",
+          "packageDependencies": [
+            ["math-interval-parser", "npm:2.0.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["messageformat", [
+        ["npm:2.3.0", {
+          "packageLocation": "./.yarn/cache/messageformat-npm-2.3.0-4afacde0c0-9c336657cb.zip/node_modules/messageformat/",
+          "packageDependencies": [
+            ["messageformat", "npm:2.3.0"],
+            ["make-plural", "npm:4.3.0"],
+            ["messageformat-formatters", "npm:2.0.1"],
+            ["messageformat-parser", "npm:4.1.3"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["messageformat-formatters", [
+        ["npm:2.0.1", {
+          "packageLocation": "./.yarn/cache/messageformat-formatters-npm-2.0.1-85f5f1d3e8-847d034aaf.zip/node_modules/messageformat-formatters/",
+          "packageDependencies": [
+            ["messageformat-formatters", "npm:2.0.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["messageformat-parser", [
+        ["npm:4.1.3", {
+          "packageLocation": "./.yarn/cache/messageformat-parser-npm-4.1.3-4950967632-d5a7258111.zip/node_modules/messageformat-parser/",
+          "packageDependencies": [
+            ["messageformat-parser", "npm:4.1.3"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["mime-db", [
         ["npm:1.51.0", {
           "packageLocation": "./.yarn/cache/mime-db-npm-1.51.0-d5e42b45ad-613b1ac9d6.zip/node_modules/mime-db/",
@@ -3067,6 +3149,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/ms-npm-2.1.3-81ff3cfac1-aa92de6080.zip/node_modules/ms/",
           "packageDependencies": [
             ["ms", "npm:2.1.3"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["mustache", [
+        ["npm:4.2.0", {
+          "packageLocation": "./.yarn/cache/mustache-npm-4.2.0-1fe3d6d77a-928fcb63e3.zip/node_modules/mustache/",
+          "packageDependencies": [
+            ["mustache", "npm:4.2.0"]
           ],
           "linkType": "HARD",
         }]
@@ -4051,6 +4142,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["sprintf-js", "npm:1.0.3"]
           ],
           "linkType": "HARD",
+        }],
+        ["npm:1.1.2", {
+          "packageLocation": "./.yarn/cache/sprintf-js-npm-1.1.2-ea16269a6d-d4bb464646.zip/node_modules/sprintf-js/",
+          "packageDependencies": [
+            ["sprintf-js", "npm:1.1.2"]
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["sqlite3", [
@@ -4434,6 +4532,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@discordjs/builders", "npm:0.11.0"],
             ["@discordjs/rest", "npm:0.2.0-canary.0"],
             ["@keyv/sqlite", "npm:2.1.0"],
+            ["@types/i18n", "npm:0.13.2"],
             ["discord-api-types", "npm:0.26.1"],
             ["discord.js", "npm:13.6.0"],
             ["dotenv", "npm:14.2.0"],
@@ -4442,6 +4541,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-import", "virtual:bdd89d7b1b642b48105894f669a2440dd65e582d4a9902dd44920b68113a698201e8cf237efd717b2236ce62354a44a580c89067c1ea3b4072f9c87c37d6ebc8#npm:2.25.4"],
             ["eslint-plugin-node", "virtual:bdd89d7b1b642b48105894f669a2440dd65e582d4a9902dd44920b68113a698201e8cf237efd717b2236ce62354a44a580c89067c1ea3b4072f9c87c37d6ebc8#npm:11.1.0"],
             ["eslint-plugin-promise", "virtual:bdd89d7b1b642b48105894f669a2440dd65e582d4a9902dd44920b68113a698201e8cf237efd717b2236ce62354a44a580c89067c1ea3b4072f9c87c37d6ebc8#npm:5.2.0"],
+            ["i18n", "npm:0.13.4"],
             ["keyv", "npm:4.0.5"],
             ["lodash", "npm:4.17.21"],
             ["nodemon", "npm:2.0.15"]

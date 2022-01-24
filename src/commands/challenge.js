@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders')
 const { MessageActionRow, MessageButton } = require('discord.js')
 const Keyv = require('keyv')
 const { join } = require('path')
+const { i18n } = require('../bot')
 
 const keyv = new Keyv(`sqlite://${join(__dirname, '../', 'sqlite', 'challenges.sqlite')}`)
 keyv.on('error', (err) => console.error(`Keyv ${err}`))
@@ -22,216 +23,218 @@ module.exports = {
 		const victim = interaction.options.getUser('victim')
 		const expanded = interaction.options.getBoolean('expanded') ?? false
 		if (victim.bot || victim.system) {
-			return await interaction.reply({ content: 'You cannot challenge bots', ephemeral: true })
+			return await interaction.reply({ content: i18n.__('cannotChallengeBots'), ephemeral: true })
 		}
 		else if (victim.id === interaction.user.id) {
-			return await interaction.reply({ content: 'You cannot challenge yourself', ephemeral: true })
+			return await interaction.reply({ content: i18n.__('cannotChallengeYourself'), ephemeral: true })
 		}
 		else {
-			if (await keyv.get(`challenge-${interaction.user.id}-${victim.id}`) != null) {
-				return await interaction.reply({ content: 'An outstanding challenge already exists.\nFinish that one first!', ephemeral: true })
+			const chall = await keyv.get(`challenge-${interaction.user.id}-${victim.id}`)
+			console.log(chall)
+			if (chall != null) {
+				return await interaction.reply({ content: i18n.__('challengeOutstanding'), ephemeral: true })
 			}
-			const time = new Date(Date.now() + 1800000)
-			keyv.set(`challenge-${interaction.user.id}-${victim.id}`,
+			await keyv.set(`challenge-${interaction.user.id}-${victim.id}`,
 				{
-					time,
 					challenger: interaction.user.id,
 					challengerPlayed: null,
 					victim: victim.id,
 					victimPlayed: null
-				})
+				}, Number.parseInt(process.env.CHALLENGE_EXPIRES_MS))
 			const row = (expanded)
 				? new MessageActionRow()
 					.addComponents(
-						new MessageButton().setCustomId('rock').setLabel('Rock').setStyle('PRIMARY'),
-						new MessageButton().setCustomId('paper').setLabel('Paper').setStyle('SECONDARY'),
-						new MessageButton().setCustomId('scissors').setLabel('Scissors').setStyle('SUCCESS'),
-						new MessageButton().setCustomId('lizard').setLabel('Lizard').setStyle('DANGER'),
+						new MessageButton().setCustomId('rock').setLabel('rock').setStyle('PRIMARY'),
+						new MessageButton().setCustomId('paper').setLabel('paper').setStyle('SECONDARY'),
+						new MessageButton().setCustomId('scissors').setLabel('scissors').setStyle('SUCCESS'),
+						new MessageButton().setCustomId('lizard').setLabel('lizard').setStyle('DANGER'),
 						new MessageButton().setCustomId('spock').setLabel('Spock').setStyle('PRIMARY')
 					)
 				: new MessageActionRow()
 					.addComponents(
-						new MessageButton().setCustomId('rock').setLabel('Rock').setStyle('PRIMARY'),
-						new MessageButton().setCustomId('paper').setLabel('Paper').setStyle('SECONDARY'),
-						new MessageButton().setCustomId('scissors').setLabel('Scissors').setStyle('SUCCESS')
+						new MessageButton().setCustomId('rock').setLabel('rock').setStyle('PRIMARY'),
+						new MessageButton().setCustomId('paper').setLabel('paper').setStyle('SECONDARY'),
+						new MessageButton().setCustomId('scissors').setLabel('scissors').setStyle('SUCCESS')
 					)
 			const endRow = new MessageActionRow()
 				.addComponents(
-					new MessageButton().setCustomId('end').setLabel('End game').setStyle('SECONDARY')
+					new MessageButton().setCustomId('end').setLabel(i18n.__('endGame')).setStyle('SECONDARY')
 				)
-			return await interaction.reply({ content: `${victim} you have been challenged by ${interaction.user} to a duel!\nExpires at ${time.toLocaleTimeString()}`, components: [row, endRow] })
+			const ttl = new Date(Date.now() + Number.parseInt(process.env.CHALLENGE_EXPIRES_MS))
+			return await interaction.reply({ content: `${victim} ${i18n.__('challengedBy')} ${interaction.user} ${i18n.__('toADuel')}!\n${i18n.__('expiresAt')} ${ttl.toLocaleString(i18n.getLocale())}`, components: [row, endRow] })
 		}
 	},
 	async buttonExecute(interaction) {
-		const challenger = interaction.message.mentions[1]
-		const victim = interaction.message.mentions[0]
-
+		const challenger = interaction.message.mentions[0]
+		const victim = interaction.message.mentions[1]
 		if (challenger == null || victim == null) {
-			// Since challenge string is built yet, and there is no capability of getting their ids, we can't remove the keyv row.
-			// It will require getting some information about the interaction. So requires testing. For now, it's fine.
-			return await interaction.update({ content: 'Game ended by default. User not available', ephemeral: true, components: [] })
+			return await interaction.update({ content: i18n.__('endedByDefault'), ephemeral: true, components: [] })
 		}
 
 		const challengeStr = `challenge-${challenger.id}-${victim.id}`
 
 		if (!(interaction.user.id === challenger.id || interaction.user.id === victim.id)) {
-			return await interaction.reply({ content: 'This isn\'t meant for you!', ephemeral: true })
+			return await interaction.reply({ content: i18n.__('notMeantForPlayer'), ephemeral: true })
 		}
 
 		// End game check
 		if (interaction.customId === 'end') {
 			// Is challenger check for end game
 			if (interaction.user.id === challenger.id) {
-				keyv.delete(challengeStr)
-				return await interaction.update({ content: 'Game ended by Challenger', components: [] })
+				await keyv.delete(challengeStr)
+				return await interaction.update({ content: i18n.__('gameEndedBy', { user: 'Challenger' }), components: [] })
 			}
 			else if (interaction.user.id === victim.id) {
-				keyv.delete(challengeStr)
-				return await interaction.update({ content: 'Game ended by Victim', components: [] })
+				await keyv.delete(challengeStr)
+				return await interaction.update({ content: i18n.__('gameEndedBy', { user: 'Victim' }), components: [] })
 			}
 			else {
-				return await interaction.reply({ content: 'This isn\'t meant for you!', ephemeral: true })
+				return await interaction.reply({ content: i18n.__('notMeantForPlayer'), ephemeral: true })
 			}
 		}
 		const challenge = await keyv.get(challengeStr)
+		const copy = { ...challenge }
 		// Is expired check
-		if (Date.now() > new Date(challenge.time).getTime()) {
-			keyv.delete(challengeStr)
-			return await interaction.update({ content: 'Time has expired! Create a new one to try again', ephemeral: true, components: [] })
+		if (challenge == null) {
+			return await interaction.update({ content: i18n.__('timeExpired'), components: [] })
 		}
 
 		// Player role check
-		interaction.user.id === challenger.id ? challenge.challengerPlayed = interaction.customId : challenge.victimPlayed = interaction.customId
+		interaction.user.id === challenger.id ? copy.challengerPlayed = interaction.customId : copy.victimPlayed = interaction.customId
 
 		// Is terminated check
-		if (challenge.challengerPlayed != null && challenge.victimPlayed != null) {
+		if (copy.challengerPlayed != null && copy.victimPlayed != null) {
 			// Do game logic
-			const chalPlay = challenge.challengerPlayed
-			const victPlay = challenge.victimPlayed
-			keyv.delete(challengeStr)
+			const chalPlay = copy.challengerPlayed
+			const victPlay = copy.victimPlayed
+			await keyv.delete(challengeStr)
 			switch (chalPlay) {
 			case 'rock':
 				switch (victPlay) {
 				case 'rock':
-					await interaction.update({ content: 'The game is a draw, both players chose Rock', components: [] })
+					await interaction.update({ content: i18n.__('draw', { reason: i18n.__('rock') }), components: [] })
 					break
 				case 'paper':
-					await interaction.update({ content: 'The victim won the game, Paper Covers Rock', components: [] })
+					await interaction.update({ content: i18n.__('victimWon', { reason: i18n.__('rockPaper') }), components: [] })
 					break
 				case 'scissors':
-					await interaction.update({ content: 'The challenger won the game, Rock Smashes Scissors', components: [] })
+					await interaction.update({ content: i18n.__('challengerWon', { reason: i18n.__('rockScissors') }), components: [] })
 					break
 				case 'lizard':
-					await interaction.update({ content: 'The challenger won the game, Rock Crushes Lizard', components: [] })
+					await interaction.update({ content: i18n.__('challengerWon', { reason: i18n.__('rockLizard') }), components: [] })
 					break
 				case 'spock':
-					await interaction.update({ content: 'The victim won the game, Spock vaporizes rock', components: [] })
+					await interaction.update({ content: i18n.__('victimWon', { reason: i18n.__('rockSpock') }), components: [] })
 					break
 				default:
-					await interaction.update({ content: `Nobody won, error: Challenger played: ${chalPlay}, Victim played ${victPlay}`, ephemeral: true, components: [] })
+					await interaction.update({ content: i18n.__('nobodyWonError', { chalPlay, victPlay }), ephemeral: true, components: [] })
 					break
 				}
 				break
 			case 'paper':
 				switch (victPlay) {
 				case 'rock':
-					await interaction.update({ content: 'The challenger won the game, Paper Covers Rock', components: [] })
+					await interaction.update({ content: i18n.__('challengerWon', { reason: i18n.__('rockPaper') }), components: [] })
 					break
 				case 'paper':
-					await interaction.update({ content: 'The game is a draw, both players chose Paper', components: [] })
+					await interaction.update({ content: i18n.__('draw', { reason: i18n.__('paper') }), components: [] })
 					break
 				case 'scissors':
-					await interaction.update({ content: 'The victim won the game, Scissors Cuts Paper', components: [] })
+					await interaction.update({ content: i18n.__('victimWon', { reason: i18n.__('paperScissors') }), components: [] })
 					break
 				case 'lizard':
-					await interaction.update({ content: 'The victim won the game, Lizard Eats Paper', components: [] })
+					await interaction.update({ content: i18n.__('victimWon', { reason: i18n.__('paperLizard') }), components: [] })
 					break
 				case 'spock':
-					await interaction.update({ content: 'The challenger won the game, Paper Disproves Spock', components: [] })
+					await interaction.update({ content: i18n.__('challengerWon', { reason: i18n.__('paperSpock') }), components: [] })
 					break
 				default:
-					await interaction.update({ content: `Nobody won, error: Challenger played: ${chalPlay}, Victim played ${victPlay}`, ephemeral: true, components: [] })
+					await interaction.update({ content: i18n.__('nobodyWonError', { chalPlay, victPlay }), ephemeral: true, components: [] })
 					break
 				}
 				break
 			case 'scissors':
 				switch (victPlay) {
 				case 'rock':
-					await interaction.update({ content: 'The victim won the game, Rock Smashes Scissors', components: [] })
+					await interaction.update({ content: i18n.__('victimWon', { reason: i18n.__('rockScissors') }), components: [] })
 					break
 				case 'paper':
-					await interaction.update({ content: 'The challenger won the game, Scissors Cuts Paper', components: [] })
+					await interaction.update({ content: i18n.__('challengerWon', { reason: i18n.__('paperScissors') }), components: [] })
 					break
 				case 'scissors':
-					await interaction.update({ content: 'The game is a draw, both players chose Scissors', components: [] })
+					await interaction.update({ content: i18n.__('draw', { reason: i18n.__('scissors') }), components: [] })
 					break
 				case 'lizard':
-					await interaction.update({ content: 'The challenger won the game, Scissors Decapitates Lizard', components: [] })
+					await interaction.update({ content: i18n.__('challengerWon', { reason: i18n.__('scissorsLizard') }), components: [] })
 					break
 				case 'spock':
-					await interaction.update({ content: 'The victim won the game, Spock Smashes Scissors', components: [] })
+					await interaction.update({ content: i18n.__('victimWon', { reason: i18n.__('scissorsSpock') }), components: [] })
 					break
 				default:
-					await interaction.update({ content: `Nobody won, error: Challenger played: ${chalPlay}, Victim played ${victPlay}`, ephemeral: true, components: [] })
+					await interaction.update({ content: i18n.__('nobodyWonError', { chalPlay, victPlay }), ephemeral: true, components: [] })
 					break
 				}
 				break
 			case 'lizard':
 				switch (victPlay) {
 				case 'rock':
-					await interaction.update({ content: 'The victim won the game, Rock Crushes Lizard', components: [] })
+					await interaction.update({ content: i18n.__('victimWon', { reason: i18n.__('rockLizard') }), components: [] })
 					break
 				case 'paper':
-					await interaction.update({ content: 'The challenger won the game, Lizard Eats Paper', components: [] })
+					await interaction.update({ content: i18n.__('challengerWon', { reason: i18n.__('paperLizard') }), components: [] })
 					break
 				case 'scissors':
-					await interaction.update({ content: 'The victim won the game, Scissors Decapitates Lizard', components: [] })
+					await interaction.update({ content: i18n.__('victimWon', { reason: i18n.__('scissorsLizard') }), components: [] })
 					break
 				case 'lizard':
-					await interaction.update({ content: 'The game is a draw, both players chose Lizard', components: [] })
+					await interaction.update({ content: i18n.__('draw', { reason: i18n.__('lizard') }), components: [] })
 					break
 				case 'spock':
-					await interaction.update({ content: 'The challenger won the game, Lizard Poisons Spock', components: [] })
+					await interaction.update({ content: i18n.__('challengerWon', { reason: i18n.__('lizardSpock') }), components: [] })
 					break
 				default:
-					await interaction.update({ content: `Nobody won, error: Challenger played: ${chalPlay}, Victim played ${victPlay}`, ephemeral: true, components: [] })
+					await interaction.update({ content: i18n.__('nobodyWonError', { chalPlay, victPlay }), ephemeral: true, components: [] })
 					break
 				}
 				break
 			case 'spock':
 				switch (victPlay) {
 				case 'rock':
-					await interaction.update({ content: 'The challenger won the game, Spock vaporizes rock', components: [] })
+					await interaction.update({ content: i18n.__('challengerWon', { reason: i18n.__('rockSpock') }), components: [] })
 					break
 				case 'paper':
-					await interaction.update({ content: 'The victim won the game, Paper Disproves Spock', components: [] })
+					await interaction.update({ content: i18n.__('victimWon', { reason: i18n.__('paperSpock') }), components: [] })
 					break
 				case 'scissors':
-					await interaction.update({ content: 'The challenger won the game, Spock Smashes Scissors', components: [] })
+					await interaction.update({ content: i18n.__('challengerWon', { reason: i18n.__('scissorsSpock') }), components: [] })
 					break
 				case 'lizard':
-					await interaction.update({ content: 'The victim won the game, Lizard Poisons Spock', components: [] })
+					await interaction.update({ content: i18n.__('victimWon', { reason: i18n.__('lizardSpock') }), components: [] })
 					break
 				case 'spock':
-					await interaction.update({ content: 'The game is a draw, both players chose Spock', components: [] })
+					await interaction.update({ content: i18n.__('draw', { reason: 'Spock' }), components: [] })
 					break
 				default:
-					await interaction.update({ content: `Nobody won, error: Challenger played: ${chalPlay}, Victim played ${victPlay}`, ephemeral: true, components: [] })
+					await interaction.update({ content: i18n.__('nobodyWonError', { chalPlay, victPlay }), ephemeral: true, components: [] })
 					break
 				}
 				break
 			default:
-				await interaction.update({ content: `Nobody won, error: Challenger played: ${chalPlay}, Victim played ${victPlay}`, ephemeral: true, components: [] })
+				await interaction.update({ content: i18n.__('nobodyWonError', { chalPlay, victPlay }), ephemeral: true, components: [] })
 				break
 			}
 		}
 		else {
 			// Set role to db
-			await keyv.set(challengeStr, challenge)
-			if ((interaction.user.id === challenger.id && challenge.challengerPlayed != null) || (interaction.user.id === victim.id && challenge.challengerPlayed != null)) {
-				return await interaction.reply({ content: 'Successfully updated', ephemeral: true })
+			await keyv.set(challengeStr, copy, Number.parseInt(process.env.CHALLENGE_EXPIRES_MS))
+			console.log(challenge)
+			console.log(copy)
+			if ((interaction.user.id === challenger.id && challenge.challengerPlayed == null) || (interaction.user.id === victim.id && challenge.victimPlayed == null)) {
+				return await interaction.update({ content: `${interaction.message.content}\n${interaction.user.toString()} ${i18n.__('hasPlayed')}!` })
 			}
-			return await interaction.update({ content: `${interaction.message.content}\n\n${interaction.user.toString()} has played!` })
+			else {
+				return await interaction.reply({ content: i18n.__('successfullyUpdated'), ephemeral: true })
+			}
 		}
 	}
 }
