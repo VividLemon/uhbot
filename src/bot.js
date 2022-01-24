@@ -45,6 +45,7 @@ client.on('interactionCreate', async (interaction) => {
 client.on('interactionCreate', async (interaction) => {
 	if (!interaction.isButton()) return
 	const command = client.commands.get(interaction.message.interaction.name)
+	i18n.setLocale(await getLang(interaction.locale))
 	try {
 		await command.buttonExecute(interaction)
 	}
