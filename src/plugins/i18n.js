@@ -6,6 +6,4 @@ const i18n = new I18n({
 	retryInDefaultLocale: true
 })
 
-module.exports = {
-	i18n
-}
+module.exports = i18n
