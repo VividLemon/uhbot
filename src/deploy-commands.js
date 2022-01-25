@@ -5,7 +5,6 @@ const { join } = require('path')
 require('dotenv').config()
 
 const commands = []
-console.log(__dirname)
 const commandFiles = readdirSync(join(__dirname, 'commands')).filter((file) => file.endsWith('.js'))
 for (const file of commandFiles) {
 	const path = join(__dirname, 'commands', file)

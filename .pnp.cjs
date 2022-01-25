@@ -41,7 +41,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/i18n", "npm:0.13.2"],
             ["discord-api-types", "npm:0.26.1"],
             ["discord.js", "npm:13.6.0"],
-            ["dotenv", "npm:14.2.0"],
+            ["dotenv", "npm:14.3.0"],
             ["eslint", "npm:7.32.0"],
             ["eslint-config-standard", "virtual:bdd89d7b1b642b48105894f669a2440dd65e582d4a9902dd44920b68113a698201e8cf237efd717b2236ce62354a44a580c89067c1ea3b4072f9c87c37d6ebc8#npm:16.0.3"],
             ["eslint-plugin-import", "virtual:bdd89d7b1b642b48105894f669a2440dd65e582d4a9902dd44920b68113a698201e8cf237efd717b2236ce62354a44a580c89067c1ea3b4072f9c87c37d6ebc8#npm:2.25.4"],
@@ -60,7 +60,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@babel-code-frame-npm-7.12.11-1a9a1b277f-3963eff3eb.zip/node_modules/@babel/code-frame/",
           "packageDependencies": [
             ["@babel/code-frame", "npm:7.12.11"],
-            ["@babel/highlight", "npm:7.16.7"]
+            ["@babel/highlight", "npm:7.16.10"]
           ],
           "linkType": "HARD",
         }]
@@ -75,10 +75,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@babel/highlight", [
-        ["npm:7.16.7", {
-          "packageLocation": "./.yarn/cache/@babel-highlight-npm-7.16.7-c36734cd1b-f7e04e7e03.zip/node_modules/@babel/highlight/",
+        ["npm:7.16.10", {
+          "packageLocation": "./.yarn/cache/@babel-highlight-npm-7.16.10-626c03326c-1f1bdd752a.zip/node_modules/@babel/highlight/",
           "packageDependencies": [
-            ["@babel/highlight", "npm:7.16.7"],
+            ["@babel/highlight", "npm:7.16.10"],
             ["@babel/helper-validator-identifier", "npm:7.16.7"],
             ["chalk", "npm:2.4.2"],
             ["js-tokens", "npm:4.0.0"]
@@ -91,7 +91,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@discordjs-builders-npm-0.11.0-8bbb083f8b-7a25b59bb5.zip/node_modules/@discordjs/builders/",
           "packageDependencies": [
             ["@discordjs/builders", "npm:0.11.0"],
-            ["@sindresorhus/is", "npm:4.3.0"],
+            ["@sindresorhus/is", "npm:4.4.0"],
             ["discord-api-types", "npm:0.26.1"],
             ["ts-mixer", "npm:6.0.0"],
             ["tslib", "npm:2.3.1"],
@@ -238,10 +238,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "HARD",
         }],
-        ["npm:4.3.0", {
-          "packageLocation": "./.yarn/cache/@sindresorhus-is-npm-4.3.0-726b7ddb82-27dc822fd6.zip/node_modules/@sindresorhus/is/",
+        ["npm:4.4.0", {
+          "packageLocation": "./.yarn/cache/@sindresorhus-is-npm-4.4.0-ce6120eafa-1d2471a75e.zip/node_modules/@sindresorhus/is/",
           "packageDependencies": [
-            ["@sindresorhus/is", "npm:4.3.0"]
+            ["@sindresorhus/is", "npm:4.4.0"]
           ],
           "linkType": "HARD",
         }]
@@ -288,16 +288,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-keyv-npm-3.1.3-8864e3cbf3-b5f8aa592c.zip/node_modules/@types/keyv/",
           "packageDependencies": [
             ["@types/keyv", "npm:3.1.3"],
-            ["@types/node", "npm:17.0.9"]
+            ["@types/node", "npm:17.0.12"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["@types/node", [
-        ["npm:17.0.9", {
-          "packageLocation": "./.yarn/cache/@types-node-npm-17.0.9-30fa625e34-64a1fa9197.zip/node_modules/@types/node/",
+        ["npm:17.0.12", {
+          "packageLocation": "./.yarn/cache/@types-node-npm-17.0.12-719f3bab17-f7e4c384b7.zip/node_modules/@types/node/",
           "packageDependencies": [
-            ["@types/node", "npm:17.0.9"]
+            ["@types/node", "npm:17.0.12"]
           ],
           "linkType": "HARD",
         }]
@@ -307,7 +307,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-node-fetch-npm-2.5.12-e9530d4758-ad63c85ba6.zip/node_modules/@types/node-fetch/",
           "packageDependencies": [
             ["@types/node-fetch", "npm:2.5.12"],
-            ["@types/node", "npm:17.0.9"],
+            ["@types/node", "npm:17.0.12"],
             ["form-data", "npm:3.0.1"]
           ],
           "linkType": "HARD",
@@ -318,7 +318,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-responselike-npm-1.0.0-85dd08af42-e99fc7cc62.zip/node_modules/@types/responselike/",
           "packageDependencies": [
             ["@types/responselike", "npm:1.0.0"],
-            ["@types/node", "npm:17.0.9"]
+            ["@types/node", "npm:17.0.12"]
           ],
           "linkType": "HARD",
         }]
@@ -328,7 +328,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-ws-npm-8.2.2-6ddc1e1158-308957864b.zip/node_modules/@types/ws/",
           "packageDependencies": [
             ["@types/ws", "npm:8.2.2"],
-            ["@types/node", "npm:17.0.9"]
+            ["@types/node", "npm:17.0.12"]
           ],
           "linkType": "HARD",
         }]
@@ -1114,10 +1114,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["dotenv", [
-        ["npm:14.2.0", {
-          "packageLocation": "./.yarn/cache/dotenv-npm-14.2.0-b237345d26-85a0e44918.zip/node_modules/dotenv/",
+        ["npm:14.3.0", {
+          "packageLocation": "./.yarn/cache/dotenv-npm-14.3.0-e1088746dd-0591a1aa6d.zip/node_modules/dotenv/",
           "packageDependencies": [
-            ["dotenv", "npm:14.2.0"]
+            ["dotenv", "npm:14.3.0"]
           ],
           "linkType": "HARD",
         }]
@@ -1343,7 +1343,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["eslint-import-resolver-node", "npm:0.3.6"],
             ["debug", "virtual:d9426786c635bc4b52511d6cc4b56156f50d780a698c0e20fc6caf10d3be51cbf176e79cff882f4d42a23ff4d0f89fe94222849578214e7fbae0f2754c82af02#npm:3.2.7"],
-            ["resolve", "patch:resolve@npm%3A1.21.0#~builtin<compat/resolve>::version=1.21.0&hash=07638b"]
+            ["resolve", "patch:resolve@npm%3A1.22.0#~builtin<compat/resolve>::version=1.22.0&hash=07638b"]
           ],
           "linkType": "HARD",
         }]
@@ -1408,7 +1408,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["is-glob", "npm:4.0.3"],
             ["minimatch", "npm:3.0.4"],
             ["object.values", "npm:1.1.5"],
-            ["resolve", "patch:resolve@npm%3A1.21.0#~builtin<compat/resolve>::version=1.21.0&hash=07638b"],
+            ["resolve", "patch:resolve@npm%3A1.22.0#~builtin<compat/resolve>::version=1.22.0&hash=07638b"],
             ["tsconfig-paths", "npm:3.12.0"]
           ],
           "packagePeers": [
@@ -1436,7 +1436,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-utils", "npm:2.1.0"],
             ["ignore", "npm:5.2.0"],
             ["minimatch", "npm:3.0.4"],
-            ["resolve", "patch:resolve@npm%3A1.21.0#~builtin<compat/resolve>::version=1.21.0&hash=07638b"],
+            ["resolve", "patch:resolve@npm%3A1.22.0#~builtin<compat/resolve>::version=1.22.0&hash=07638b"],
             ["semver", "npm:6.3.0"]
           ],
           "packagePeers": [
@@ -2618,7 +2618,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["minipass-fetch", "npm:1.4.1"],
             ["minipass-flush", "npm:1.0.5"],
             ["minipass-pipeline", "npm:1.2.4"],
-            ["negotiator", "npm:0.6.2"],
+            ["negotiator", "npm:0.6.3"],
             ["promise-retry", "npm:2.0.1"],
             ["socks-proxy-agent", "npm:6.1.1"],
             ["ssri", "npm:8.0.1"]
@@ -2854,10 +2854,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["negotiator", [
-        ["npm:0.6.2", {
-          "packageLocation": "./.yarn/cache/negotiator-npm-0.6.2-ba538e167a-dfddaff6c0.zip/node_modules/negotiator/",
+        ["npm:0.6.3", {
+          "packageLocation": "./.yarn/cache/negotiator-npm-0.6.3-9d50e36171-b8ffeb1e26.zip/node_modules/negotiator/",
           "packageDependencies": [
-            ["negotiator", "npm:0.6.2"]
+            ["negotiator", "npm:0.6.3"]
           ],
           "linkType": "HARD",
         }]
@@ -3364,10 +3364,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["resolve", [
-        ["patch:resolve@npm%3A1.21.0#~builtin<compat/resolve>::version=1.21.0&hash=07638b", {
-          "packageLocation": "./.yarn/cache/resolve-patch-2bdd9af071-a0a4d1f740.zip/node_modules/resolve/",
+        ["patch:resolve@npm%3A1.22.0#~builtin<compat/resolve>::version=1.22.0&hash=07638b", {
+          "packageLocation": "./.yarn/cache/resolve-patch-bad885c6ea-c79ecaea36.zip/node_modules/resolve/",
           "packageDependencies": [
-            ["resolve", "patch:resolve@npm%3A1.21.0#~builtin<compat/resolve>::version=1.21.0&hash=07638b"],
+            ["resolve", "patch:resolve@npm%3A1.22.0#~builtin<compat/resolve>::version=1.22.0&hash=07638b"],
             ["is-core-module", "npm:2.8.1"],
             ["path-parse", "npm:1.0.7"],
             ["supports-preserve-symlinks-flag", "npm:1.0.0"]
@@ -3846,7 +3846,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/i18n", "npm:0.13.2"],
             ["discord-api-types", "npm:0.26.1"],
             ["discord.js", "npm:13.6.0"],
-            ["dotenv", "npm:14.2.0"],
+            ["dotenv", "npm:14.3.0"],
             ["eslint", "npm:7.32.0"],
             ["eslint-config-standard", "virtual:bdd89d7b1b642b48105894f669a2440dd65e582d4a9902dd44920b68113a698201e8cf237efd717b2236ce62354a44a580c89067c1ea3b4072f9c87c37d6ebc8#npm:16.0.3"],
             ["eslint-plugin-import", "virtual:bdd89d7b1b642b48105894f669a2440dd65e582d4a9902dd44920b68113a698201e8cf237efd717b2236ce62354a44a580c89067c1ea3b4072f9c87c37d6ebc8#npm:2.25.4"],

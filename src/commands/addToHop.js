@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
-const addToHop = require('../util/addToHop')
-const { i18n } = require('../bot')
+const { addToHop } = require('../util/')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -18,6 +17,7 @@ module.exports = {
 			option.setName('ephemeral')
 				.setDescription('Hides the value for only you to see')),
 	async execute(interaction) {
+		const { i18n } = require('../plugins/')
 		const skill = interaction.options.getInteger('skill')
 		const hops = interaction.options.getInteger('hops')
 		const ephemeral = interaction.options.getBoolean('ephemeral') ?? false

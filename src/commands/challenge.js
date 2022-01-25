@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 const { MessageActionRow, MessageButton } = require('discord.js')
-const { i18n, keyv } = require('../bot')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -14,6 +13,7 @@ module.exports = {
 			option.setName('expanded')
 				.setDescription('Hail Sam Kass!')),
 	async execute(interaction) {
+		const { i18n, keyv } = require('../plugins/')
 		const victim = interaction.options.getUser('victim')
 		const expanded = interaction.options.getBoolean('expanded') ?? false
 		if (victim.bot || victim.system) {
@@ -58,6 +58,7 @@ module.exports = {
 		}
 	},
 	async buttonExecute(interaction) {
+		const { i18n, keyv } = require('../plugins/')
 		const challenger = interaction.message.mentions[0]
 		const victim = interaction.message.mentions[1]
 		if (challenger == null || victim == null) {

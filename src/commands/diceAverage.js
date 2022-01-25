@@ -1,9 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
-const addModifiers = require('../util/addModifiers')
-const buildTempFile = require('../util/buildTempFile')
+const { addModifiers, buildTempFile } = require('../util/')
 const { unlink } = require('fs/promises')
 const { MessageAttachment } = require('discord.js')
-const { i18n } = require('../bot')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -27,6 +25,7 @@ module.exports = {
 			option.setName('ephemeral')
 				.setDescription('Hides the value for only you to see')),
 	async execute(interaction) {
+		const { i18n } = require('../plugins/')
 		let gFile
 		const number = interaction.options.getInteger('number')
 		const size = interaction.options.getInteger('size')

@@ -1,10 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
-const buildTempFile = require('../util/buildTempFile')
-const roll = require('../util/roll')
-const rollsWriteContent = require('../util/rollsWriteContent')
+const { buildTempFile, roll, rollsWriteContent } = require('../util/')
 const { unlink } = require('fs/promises')
 const { MessageAttachment } = require('discord.js')
-const { i18n } = require('../bot')
 
 
 module.exports = {
@@ -31,6 +28,7 @@ module.exports = {
 			option.setName('ephemeral')
 				.setDescription('Hides the value for only you to see')),
 	async execute(interaction) {
+		const { i18n } = require('../plugins/')
 		let gFile
 		const size = interaction.options.getInteger('size')
 		const rerolls = interaction.options.getInteger('rerolls') ?? 1
