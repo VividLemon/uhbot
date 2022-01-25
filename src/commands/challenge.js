@@ -1,12 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 const { MessageActionRow, MessageButton } = require('discord.js')
-const Keyv = require('keyv')
-const { join } = require('path')
-const { i18n } = require('../bot')
-
-const keyv = new Keyv(`sqlite://${join(__dirname, '../', 'sqlite', 'challenges.sqlite')}`)
-keyv.on('error', (err) => console.error(`Keyv ${err}`))
-
+const { i18n, keyv } = require('../bot')
 
 module.exports = {
 	data: new SlashCommandBuilder()

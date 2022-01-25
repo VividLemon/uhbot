@@ -3,6 +3,11 @@ const { readdirSync } = require('fs')
 const { join } = require('path')
 const { I18n } = require('i18n')
 const getLang = require('./util/getLang')
+const Keyv = require('keyv')
+
+// Important! Must have redis container
+const keyv = new Keyv(`redis://user:${process.env.REDIS_PASSWORD}@localhost:6379`)
+keyv.on('error', (err) => console.error(`Keyv ${err}`))
 
 const i18n = new I18n({
 	locales: ['en', 'es'],
@@ -11,7 +16,8 @@ const i18n = new I18n({
 })
 
 module.exports = {
-	i18n
+	i18n,
+	keyv
 }
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] })
