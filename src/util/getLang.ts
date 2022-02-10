@@ -3,7 +3,7 @@
  * @param {string} locale in either en form or en-US form
  * @returns {promise<string>} slices locale down to 2
  */
-module.exports = (locale) => {
+export default (locale: string): Promise<string> => {
 	return new Promise((resolve, reject) => {
 		if (locale.length > 2) {
 			resolve(locale.slice(0, 2))

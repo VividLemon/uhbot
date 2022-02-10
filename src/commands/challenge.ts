@@ -1,7 +1,8 @@
-const { SlashCommandBuilder } = require('@discordjs/builders')
-const { MessageActionRow, MessageButton } = require('discord.js')
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { CommandInteraction, MessageActionRow, MessageButton } from 'discord.js'
+import { i18n, keyv } from '../plugins/'
 
-module.exports = {
+export default {
 	data: new SlashCommandBuilder()
 		.setName('challenge')
 		.setDescription('Send a targetted user a challenge!')
@@ -12,9 +13,8 @@ module.exports = {
 		.addBooleanOption((option) =>
 			option.setName('expanded')
 				.setDescription('Hail Sam Kass!')),
-	async execute(interaction) {
-		const { i18n, keyv } = require('../plugins/')
-		const victim = interaction.options.getUser('victim')
+	async execute(interaction: CommandInteraction) {
+		const victim = interaction.options.getUser('victim')!
 		const expanded = interaction.options.getBoolean('expanded') ?? false
 		if (victim.bot || victim.system) {
 			return await interaction.reply({ content: i18n.__('cannotChallengeBots'), ephemeral: true })
@@ -57,7 +57,7 @@ module.exports = {
 			return await interaction.reply({ content: `${victim} ${i18n.__('challengedBy')} ${interaction.user} ${i18n.__('toADuel')}!\n${i18n.__('expiresAt')} ${ttl.toLocaleString(i18n.getLocale())}`, components: [row, endRow] })
 		}
 	},
-	async buttonExecute(interaction) {
+	async buttonexecute(interaction: CommandInteraction) {
 		const { i18n, keyv } = require('../plugins/')
 		const challenger = interaction.message.mentions[0]
 		const victim = interaction.message.mentions[1]

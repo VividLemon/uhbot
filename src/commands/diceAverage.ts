@@ -1,9 +1,10 @@
-const { SlashCommandBuilder } = require('@discordjs/builders')
-const { addModifiers, buildTempFile } = require('../util/')
-const { unlink } = require('fs/promises')
-const { MessageAttachment } = require('discord.js')
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { addModifiers, buildTempFile } from '../util/'
+import { unlink } from 'fs/promises'
+import { CommandInteraction, MessageAttachment } from 'discord.js'
+import { i18n } from '../plugins/'
 
-module.exports = {
+export default {
 	data: new SlashCommandBuilder()
 		.setName('dice-average')
 		.setDescription('Gets the expected average of dice')
@@ -24,11 +25,10 @@ module.exports = {
 		.addBooleanOption((option) =>
 			option.setName('ephemeral')
 				.setDescription('Hides the value for only you to see')),
-	async execute(interaction) {
-		const { i18n } = require('../plugins/')
+	async execute(interaction: CommandInteraction) {
 		let gFile
-		const number = interaction.options.getInteger('number')
-		const size = interaction.options.getInteger('size')
+		const number = interaction.options.getInteger('number')!
+		const size = interaction.options.getInteger('size')!
 		const ephemeral = interaction.options.getBoolean('ephemeral') ?? false
 		const modifiers = interaction.options.getString('modifiers') ?? ''
 		const rerolls = interaction.options.getInteger('rerolls') ?? 1
@@ -64,7 +64,7 @@ module.exports = {
 				const mFile = new MessageAttachment(file)
 				return await interaction.reply({ content: i18n.__('totalIs', { value: obj.total.toLocaleString(interaction.locale) }), ephemeral, files: [mFile] })
 			}
-			catch (err) {
+			catch (err: any) {
 				console.error({ error: err, interaction })
 				return await interaction.reply({ content: `${i18n.__('error')}: ${err.message}`, ephemeral: true })
 			}

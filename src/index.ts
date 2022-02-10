@@ -1,6 +1,6 @@
-const { join } = require('path')
-const { ShardingManager } = require('discord.js')
-require('dotenv').config()
+import { join } from 'path'
+import { ShardingManager } from 'discord.js'
+import 'dotenv/config'
 
 const manager = new ShardingManager(join(__dirname, './bot.js'), { token: process.env.TOKEN })
 

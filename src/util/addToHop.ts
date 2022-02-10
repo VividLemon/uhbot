@@ -4,7 +4,7 @@
  * @param {number} hops
  * @returns {Promise<{oldSkill: number, newSkill: number, hopsRemaining: number}>} {oldSkill, newSkill, hopsRemaining}
  */
-module.exports = (skill, hops) => {
+export default (skill: number, hops: number): Promise<{ oldSkill: number; newSkill: number; hopsRemaining: number }> => {
 	return new Promise((resolve, reject) => {
 		let oldSkillPlus = skill
 		let hopsUsed = hops

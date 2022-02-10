@@ -4,7 +4,7 @@
  * @param {number} to
  * @returns {Promise<number>} number
  */
-module.exports = (from, to) => {
+export default (from: number, to: number): Promise<number> => {
 	return new Promise((resolve, reject) => {
 		const difference = to - from
 		let oldSkillPlus = from

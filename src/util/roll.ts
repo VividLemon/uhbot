@@ -1,14 +1,22 @@
-const { random } = require('lodash')
-const addModifiers = require('./addModifiers')
+import { random }  from 'lodash'
+import {addModifiers}  from './'
+
+export interface Roll {
+	size: number, 
+	number: number,
+	rerolls: number,
+	explode: number,
+	diceModifiers: string
+}
 /**
  *
  * @param {{size: number, number: number, rerolls: number, explode: number, modifiers: string}} object
  * @returns {Promise<{total: number, rolls: Array<number>, modifieds: Array<number>, rerollsSafeHit: boolean, explodes: Array<number>, explodeSafeHit: boolean}>} {total: number, rolls: Array<number>, modifieds: Array<number>, rerollsSafeHit: boolean, explodes: Array<number>, explodeSafeHit: boolean}
  */
-module.exports = ({ size, number, rerolls, explode, diceModifiers }) => {
+module.exports = ({ size, number, rerolls, explode, diceModifiers }: Roll) => {
 	return new Promise((resolve, reject) => {
-		let maxSafeExplode = Number.parseInt(process.env.MAX_SAFE_EXPLODE)
-		let maxSafeRerolls = Number.parseInt(process.env.MAX_SAFE_REROLLS)
+		let maxSafeExplode = Number.parseInt(process.env.MAX_SAFE_EXPLODE!)
+		let maxSafeRerolls = Number.parseInt(process.env.MAX_SAFE_REROLLS!)
 		const allRolls = []
 		for (let i = 0; i < rerolls && maxSafeRerolls > 0; i++) {
 			allRolls.push({

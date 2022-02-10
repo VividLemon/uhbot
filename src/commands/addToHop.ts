@@ -1,7 +1,9 @@
-const { SlashCommandBuilder } = require('@discordjs/builders')
-const { addToHop } = require('../util/')
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { CommandInteraction } from 'discord.js'
+import { addToHop } from '../util/'
+import { i18n } from '../plugins/'
 
-module.exports = {
+export default {
 	data: new SlashCommandBuilder()
 		.setName('add-to-hop')
 		.setDescription('Returns the skill you can achieve with x amount of hops')
@@ -16,10 +18,9 @@ module.exports = {
 		.addBooleanOption((option) =>
 			option.setName('ephemeral')
 				.setDescription('Hides the value for only you to see')),
-	async execute(interaction) {
-		const { i18n } = require('../plugins/')
-		const skill = interaction.options.getInteger('skill')
-		const hops = interaction.options.getInteger('hops')
+	async execute(interaction: CommandInteraction) {
+		const skill = interaction.options.getInteger('skill')!
+		const hops = interaction.options.getInteger('hops')!
 		const ephemeral = interaction.options.getBoolean('ephemeral') ?? false
 		if (skill < 0) {
 			return await interaction.reply({ content: i18n.__('skillNotNegative'), ephemeral: true })
@@ -35,7 +36,7 @@ module.exports = {
 				content = `${content}\n${i18n.__('with')} ${obj.hopsRemaining.toLocaleString(interaction.locale)} ${(Math.abs(obj.hopsRemaining) === 1) ? i18n.__n('hop', 1) : i18n.__('hop', 2)} ${i18n.__('remaining')}`
 				return await interaction.reply({ content, ephemeral })
 			}
-			catch (err) {
+			catch (err: any) {
 				console.error({ error: err, interaction })
 				return await interaction.reply({ content: `${i18n.__('error')}: ${err.message}`, ephemeral: true })
 			}

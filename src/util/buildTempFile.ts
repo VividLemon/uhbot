@@ -7,7 +7,7 @@ const { join } = require('path')
  * @param {string} content
  * @returns {Promise<string>} path to file
  */
-module.exports = async (content) => {
+export default async (content: string): Promise<string> => {
 	const path = join(tmpdir(), `${randomUUID()}.json`)
 	await writeFile(path, content)
 	return path

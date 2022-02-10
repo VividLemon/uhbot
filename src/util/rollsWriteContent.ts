@@ -6,9 +6,9 @@ const addModifiers = require('./addModifiers')
  * @param {String} modifiers
  * @returns {Promise<{total: number, rolls: Array<any>}} {total: number, rolls: Array<any>}
  */
-module.exports = (allRolls, modifiers = false) => {
+export default (allRolls: Array<{ total: number }>, modifiers: string): Promise<{ total: number; rolls: Array<any> }> => {
 	return new Promise((resolve, reject) => {
-		const arr = []
+		const arr: Array<{total: number}> = []
 		allRolls.forEach((element) => {
 			for (const [key, value] of Object.entries(element)) {
 				if (Array.isArray(value) && value.length === 0) {
