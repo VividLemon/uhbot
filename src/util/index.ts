@@ -7,11 +7,11 @@ import roll from './roll'
 import rollsWriteContent from './rollsWriteContent'
 
 export {
-	addModifiers,
-	addToHop,
-	addToStat,
-	buildTempFile,
-	getLang,
-	roll,
-	rollsWriteContent
+  addModifiers,
+  addToHop,
+  addToStat,
+  buildTempFile,
+  getLang,
+  roll,
+  rollsWriteContent
 }

@@ -4,15 +4,13 @@
  * @returns {promise<string>} slices locale down to 2
  */
 export default (locale: string): Promise<string> => {
-	return new Promise((resolve, reject) => {
-		if (locale.length > 2) {
-			resolve(locale.slice(0, 2))
-		}
-		else if (locale.length === 2) {
-			resolve(locale)
-		}
-		else {
-			reject(new Error('Locale is not standard length of 2 or 5'))
-		}
-	})
+  return new Promise((resolve, reject) => {
+    if (locale.length > 2) {
+      resolve(locale.slice(0, 2))
+    } else if (locale.length === 2) {
+      resolve(locale)
+    } else {
+      reject(new Error('Locale is not standard length of 2 or 5'))
+    }
+  })
 }
