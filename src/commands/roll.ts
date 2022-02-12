@@ -1,0 +1,74 @@
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { buildTempFile, roll, rollsWriteContent } from '../util/'
+import { unlink } from 'fs/promises'
+import { CommandInteraction, MessageAttachment } from 'discord.js'
+import { i18n } from '../plugins/'
+
+export default {
+  data: new SlashCommandBuilder()
+    .setName('roll')
+    .setDescription('Rolls dice')
+    .addIntegerOption((option) =>
+      option.setName('size')
+        .setDescription('Size of each die')
+        .setRequired(true))
+    .addIntegerOption((option) =>
+      option.setName('number')
+        .setDescription('How many of each die')
+        .setRequired(true))
+    .addStringOption((option) =>
+      option.setName('modifiers')
+        .setDescription('Modifies the final with a given modified (+,-,*,/). Executes in the order provided, ex (+5-2*3)'))
+    .addStringOption((option) =>
+      option.setName('dice-modifiers')
+        .setDescription('Modifies each dice roll with a given modifier. Explodes excluded'))
+    .addIntegerOption((option) =>
+      option.setName('explode')
+        .setDescription('Causes a reroll when the roll value hits or exceeds target'))
+    .addIntegerOption((option) =>
+      option.setName('rerolls')
+        .setDescription('Rerolls the same size and number of dice x amount of times'))
+    .addBooleanOption((option) =>
+      option.setName('ephemeral')
+        .setDescription('Hides the value for only you to see')),
+  async execute (interaction: CommandInteraction) {
+    let gFile
+    const number = interaction.options.getInteger('number')!
+    const size = interaction.options.getInteger('size')!
+    const ephemeral = interaction.options.getBoolean('ephemeral') ?? false
+    const explode = interaction.options.getInteger('explode') ?? size + 1
+    const modifiers = interaction.options.getString('modifiers') ?? ''
+    const diceModifiers = interaction.options.getString('dice-modifiers') ?? ''
+    const rerolls = interaction.options.getInteger('rerolls') ?? 1
+    if (size < 1) {
+      return await interaction.reply({ content: i18n.__('sizeNegativeOrZero'), ephemeral: true })
+    } else if (number < 1) {
+      return await interaction.reply({ content: i18n.__('numberNegativeOrZero'), ephemeral: true })
+    } else if (explode > size + 1) {
+      return await interaction.reply({ content: i18n.__('explodeOverValue'), ephemeral: true })
+    } else if (rerolls < 1) {
+      return await interaction.reply({ content: i18n.__('rerollsNegativeOrZero'), ephemeral: true })
+    } else if (rerolls >= Math.floor(Number.parseInt(process.env.MAX_SAFE_REROLLS!) / 10)) {
+      return await interaction.reply({ content: i18n.__('rerollsLessThan', { value: Math.floor(Number.parseInt(process.env.MAX_SAFE_REROLLS!) / 10).toLocaleString(interaction.locale) }), ephemeral: true })
+    } else {
+      try {
+        const obj = await roll({ size, number, rerolls, explode, diceModifiers })
+        const content = await rollsWriteContent(obj, modifiers)
+        const file = await buildTempFile(JSON.stringify(content, null, 2))
+        gFile = file
+        const mFile = new MessageAttachment(file)
+        return await interaction.reply({ content: i18n.__('totalIs', { value: content.total.toLocaleString(interaction.locale) }), ephemeral, files: [mFile] })
+      } catch (err: any) {
+        console.error({ error: err, interaction })
+        return await interaction.reply({ content: `${i18n.__('error')}: ${err.message}`, ephemeral: true })
+      } finally {
+        if (gFile != null) {
+          unlink(gFile)
+            .catch((err) => {
+              console.error({ error: err, interaction })
+            })
+        }
+      }
+    }
+  }
+}

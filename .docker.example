@@ -6,14 +6,6 @@ COPY package*.json ./
 
 COPY . .
 
-ENV TOKEN={string} discord.js apitoken
-ENV GUILD={number} guild id
-ENV CLIENT={number} bot client id
-ENV MAX_SAFE_EXPLODE={number} maximum safe explodes -- perf
-ENV MAX_SAFE_REROLLS={number} maximum safe rerolls -- perf
-ENV MAX_SAFE_ARGS={number} maximum safe args --perf
-ENV REDIS_PASSWORD={string} redis password string
-
 RUN yarn install
 
 CMD [ "yarn", "start" ]
