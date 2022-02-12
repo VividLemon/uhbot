@@ -15,7 +15,7 @@
     "build": "tsc --build",
     "watch": "tsc --watch",
     "dev": "nodemon ./dist/index.js",
-    "start": "yarn node ./src/deploy-commands.js; yarn node ./src/index.js"
+    "start": "yarn node ./dist/deploy-commands.js; yarn node ./dist/index.js"
   },
   "dependencies": {
     "@discordjs/builders": "^0.11.0",

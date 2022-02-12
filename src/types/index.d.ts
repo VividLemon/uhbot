@@ -14,12 +14,14 @@ declare namespace uhbot {
     }
 
     interface RollReturns {
-        total: number
-        rolls: Array<number>
-        modifieds: Array<number>
-        rerollsSafeHit?: boolean
-        explodes?: Array<number>
-        explodeSafeHit?: boolean
+        total: number,
+        value?: number,
+        modifiers?: string,
+        rerollsSafeHit?: boolean,
+        explodeSafeHit?: boolean,
+        rolls: Array<number>,
+        modifieds: Array<number>,
+        explodes: Array<number>
     }
 
     interface PEMObject {

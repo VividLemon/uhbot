@@ -1,4 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
+import { APIMessage } from 'discord-api-types'
 import { ButtonInteraction, CommandInteraction, MessageActionRow, MessageButton } from 'discord.js'
 import { i18n, keyv } from '../plugins/'
 
@@ -55,10 +56,9 @@ export default {
       return await interaction.reply({ content: `${victim} ${i18n.__('challengedBy')} ${interaction.user} ${i18n.__('toADuel')}!\n${i18n.__('expiresAt')} ${ttl.toLocaleString(i18n.getLocale())}`, components: [row, endRow] })
     }
   },
-  async buttonexecute (interaction: ButtonInteraction) {
-    // TODO fix this
-    const challenger = interaction.message.mentions[0]
-    const victim = interaction.message.mentions[1]
+  async buttonExecute (interaction: ButtonInteraction) {
+    const challenger = (interaction.message as any as APIMessage).mentions[0]
+    const victim = (interaction.message as any as APIMessage).mentions[1]
     if (challenger == null || victim == null) {
       return await interaction.update({ content: i18n.__('endedByDefault'), components: [] })
     }

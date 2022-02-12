@@ -11,12 +11,12 @@ export default ({ size, number, rerolls, explode, diceModifiers }: RollItems): P
   return new Promise((resolve, reject) => {
     let maxSafeExplode = Number.parseInt(process.env.MAX_SAFE_EXPLODE!)
     let maxSafeRerolls = Number.parseInt(process.env.MAX_SAFE_REROLLS!)
-    const allRolls = []
+    const allRolls: Array<RollReturns> = []
     for (let i = 0; i < rerolls && maxSafeRerolls > 0; i++) {
       allRolls.push({
         total: 0,
         value: 0,
-        modifiers: diceModifiers || null,
+        modifiers: diceModifiers,
         rerollsSafeHit: false,
         explodeSafeHit: false,
         rolls: [],
@@ -31,7 +31,7 @@ export default ({ size, number, rerolls, explode, diceModifiers }: RollItems): P
         if (diceModifiers) {
           const added = addModifiers(diceModifiers, roll)
           curr.modifieds.push(added)
-          curr.value = curr.value + roll
+          curr.value = curr.value! + roll
           curr.total = curr.total + added
         } else {
           delete curr.value

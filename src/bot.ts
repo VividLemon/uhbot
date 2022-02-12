@@ -3,6 +3,7 @@ import { readdirSync } from 'fs'
 import { join } from 'path'
 import { getLang } from './util/'
 import { i18n } from './plugins/'
+import { APIMessageInteraction } from 'discord-api-types'
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] })
 // TODO test everything!!!
@@ -10,7 +11,7 @@ client.commands = new Collection()
 const commandFiles = readdirSync(join(__dirname, 'commands')).filter((file) => file.endsWith('.js'))
 for (const file of commandFiles) {
   const path = join(__dirname, 'commands', file)
-  import(path).then((command) => client.commands.set(command.default.data.name, command))
+  import(path).then((command) => client.commands.set(command.default.data.name, command.default))
 }
 
 client.once('ready', () => {
@@ -33,7 +34,7 @@ client.on('interactionCreate', async (interaction) => {
 client.on('interactionCreate', async (interaction) => {
   if (!interaction.isButton()) return
   // TODO fix this
-  const command = client.commands.get(interaction.message.interaction.name)
+  const command = client.commands.get((interaction.message.interaction! as any as APIMessageInteraction).name)
   i18n.setLocale(await getLang(interaction.locale))
   try {
     await command.buttonExecute(interaction)

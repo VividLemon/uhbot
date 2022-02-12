@@ -65,16 +65,6 @@ typings/
 # Output of 'npm pack'
 *.tgz
 
-# Yarn
-.yarn-integrity
-.yarn/*
-!.yarn/cache
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
-
 # dotenv environment variables file
 .env
 .env.test
@@ -87,7 +77,9 @@ typings/
 
 # Nuxt.js build / generate output
 .nuxt
-dist
+
+# Src file
+src/
 
 # Gatsby files
 .cache/
@@ -113,13 +105,6 @@ dist
 #vscode
 .vscode/
 
-#tmp
-tmp/*
-!tmp/README.md
-
-#Sqlite
-sqlite/*.sqlite
-
-#Dockerfile
+# Dockerfile
 Dockerfile
 
