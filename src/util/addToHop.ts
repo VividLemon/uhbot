@@ -7,7 +7,7 @@ import { AddHop } from 'uhbot'
  * @returns {Promise<AddHop>} {oldSkill, newSkill, hopsRemaining}
  */
 export default (skill: number, hops: number): Promise<AddHop> => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     let oldSkillPlus = skill
     let hopsUsed = hops
     while (hopsUsed > 0) {

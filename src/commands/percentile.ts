@@ -24,7 +24,6 @@ export default {
       option.setName('ephemeral')
         .setDescription('Hides the value for only you to see')),
   async execute (interaction: CommandInteraction) {
-    let gFile
     const ephemeral = interaction.options.getBoolean('ephemeral') ?? false
     const explode = interaction.options.getInteger('explode') ?? 101
     const modifiers = interaction.options.getString('modifiers') ?? ''
@@ -39,24 +38,15 @@ export default {
     } else if (rerolls >= Math.floor(Number.parseInt(process.env.MAX_SAFE_REROLLS!) / 10)) {
       return await interaction.reply({ content: i18n.__('rerollsLessThan', { value: Math.floor(Number.parseInt(process.env.MAX_SAFE_REROLLS!) / 10).toLocaleString(interaction.locale) }), ephemeral: true })
     } else {
-      try {
-        const obj = await roll({ size: 100, number: 1, rerolls, explode, diceModifiers })
-        const content = await rollsWriteContent(obj, modifiers)
-        const file = await buildTempFile(JSON.stringify(content, null, 2))
-        gFile = file
-        const mFile = new MessageAttachment(file)
-        return await interaction.reply({ content: i18n.__('totalIs', { value: content.total.toLocaleString(interaction.locale) }), ephemeral, files: [mFile] })
-      } catch (err: any) {
-        console.error({ error: err, interaction })
-        return await interaction.reply({ content: `${i18n.__('error')}: ${err.message}`, ephemeral: true })
-      } finally {
-        if (gFile != null) {
-          unlink(gFile)
-            .catch((err) => {
-              console.error({ error: err, interaction })
-            })
-        }
-      }
+      const obj = await roll({ size: 100, number: 1, rerolls, explode, diceModifiers })
+      const content = await rollsWriteContent(obj, modifiers)
+      const file = await buildTempFile(JSON.stringify(content, null, 2))
+      const mFile = new MessageAttachment(file)
+      unlink(file)
+        .catch((error) => {
+          console.error({ error, interaction })
+        })
+      return await interaction.reply({ content: i18n.__('totalIs', { value: content.total.toLocaleString(interaction.locale) }), ephemeral, files: [mFile] })
     }
   }
 

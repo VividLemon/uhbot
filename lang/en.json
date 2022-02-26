@@ -59,5 +59,6 @@
 	"noZeroDivide": "No values can be 0. Cannot divide by 0",
 	"explodeNotZeroOrNegative": "Explode cannot be negative or zero",
 	"explodeOverPercentile": "Explode cannot be greater than what's possible on a 100 sided die",
-	"explodeOverValue": "Explode cannot be greater than the size of the die"
+	"explodeOverValue": "Explode cannot be greater than the size of the die",
+	"errorWasLogged": "There was an error while trying to execute this command\nError was logged"
 }

@@ -8,7 +8,7 @@ import addModifiers from './addModifiers'
  * @returns {Promise<RollsWrittenContent}
  */
 export default (allRolls: Array<any>, modifiers: string): Promise<RollsWrittenContent> => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const arr: Array<{total: number}> = []
     allRolls.forEach((element) => {
       for (const [key, value] of Object.entries(element)) {

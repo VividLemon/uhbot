@@ -27,16 +27,11 @@ export default {
     } else if (hops <= 0) {
       return await interaction.reply({ content: i18n.__('hopsNotNegative'), ephemeral: true })
     } else {
-      try {
-        const obj = await addToHop(skill, hops)
-        let content = `${i18n.__('canGetToSkill')}: ${obj.newSkill.toLocaleString(interaction.locale)}`
-        content = `${content}\n${i18n.__('startingAtLevel')}: ${obj.oldSkill.toLocaleString(interaction.locale)}`
-        content = `${content}\n${i18n.__('with')} ${obj.hopsRemaining.toLocaleString(interaction.locale)} ${(Math.abs(obj.hopsRemaining) === 1) ? i18n.__n('hop', 1) : i18n.__n('hop', 2)} ${i18n.__('remaining')}`
-        return await interaction.reply({ content, ephemeral })
-      } catch (err: any) {
-        console.error({ error: err, interaction })
-        return await interaction.reply({ content: `${i18n.__('error')}: ${err.message}`, ephemeral: true })
-      }
+      const obj = await addToHop(skill, hops)
+      let content = `${i18n.__('canGetToSkill')}: ${obj.newSkill.toLocaleString(interaction.locale)}`
+      content = `${content}\n${i18n.__('startingAtLevel')}: ${obj.oldSkill.toLocaleString(interaction.locale)}`
+      content = `${content}\n${i18n.__('with')} ${obj.hopsRemaining.toLocaleString(interaction.locale)} ${(Math.abs(obj.hopsRemaining) === 1) ? i18n.__n('hop', 1) : i18n.__n('hop', 2)} ${i18n.__('remaining')}`
+      return await interaction.reply({ content, ephemeral })
     }
   }
 }

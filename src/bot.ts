@@ -6,7 +6,6 @@ import { i18n } from './plugins/'
 import { APIMessageInteraction } from 'discord-api-types'
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] })
-// TODO test everything!!!
 client.commands = new Collection()
 const commandFiles = readdirSync(join(__dirname, 'commands')).filter((file) => file.endsWith('.js'))
 for (const file of commandFiles) {
@@ -25,22 +24,22 @@ client.on('interactionCreate', async (interaction) => {
   i18n.setLocale(await getLang(interaction.locale))
   try {
     await command.execute(interaction)
-  } catch (err: any) {
-    console.error({ error: err, interaction })
-    return await interaction.reply({ content: 'There was an error while trying to execute this command\nError was logged', ephemeral: true })
+  } catch (error: unknown) {
+    console.error({ error, interaction })
+    return await interaction.reply({ content: i18n.__('errorWasLogged'), ephemeral: true })
   }
 })
 
 client.on('interactionCreate', async (interaction) => {
   if (!interaction.isButton()) return
-  // TODO fix this
-  const command = client.commands.get((interaction.message.interaction! as any as APIMessageInteraction).name)
+  if (interaction.message.interaction == null) return
+  const command = client.commands.get((interaction.message.interaction as unknown as APIMessageInteraction).name)
   i18n.setLocale(await getLang(interaction.locale))
   try {
     await command.buttonExecute(interaction)
-  } catch (err: any) {
-    console.error({ error: err, interaction })
-    return await interaction.reply({ content: 'There was an error while trying to execute this command\nError was logged', ephemeral: true })
+  } catch (error: unknown) {
+    console.error({ error, interaction })
+    return await interaction.reply({ content: i18n.__('errorWasLogged'), ephemeral: true })
   }
 })
 

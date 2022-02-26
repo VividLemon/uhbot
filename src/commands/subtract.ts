@@ -20,7 +20,6 @@ export default {
       option.setName('ephemeral')
         .setDescription('Hides the value for only you to see')),
   async execute (interaction: CommandInteraction) {
-    let gFile
     const ephemeral = interaction.options.getBoolean('ephemeral') ?? false
     const modifiers = interaction.options.getString('modifiers') ?? ''
     const values = interaction.options.getString('values')!
@@ -33,31 +32,22 @@ export default {
       console.warn(interaction)
       return await interaction.reply({ content: i18n.__('valueOverMaxSafeArgs'), ephemeral: true })
     } else {
-      try {
-        const obj: PEMObject = nums.reduce((total, el) => {
-          const value = total.value - Number.parseInt(el)
-          return { value, total: value, modifiers: modifiers || undefined }
-        }, { value: Number.parseInt(nums[0]), total: Number.parseInt(nums[0]), modifiers: modifiers || undefined })
-        if (modifiers) {
-          obj.total = addModifiers(modifiers, obj.total)
-        } else {
-          delete obj.modifiers
-        }
-        const file = await buildTempFile(JSON.stringify(obj, null, 2))
-        gFile = file
-        const mFile = new MessageAttachment(file)
-        return await interaction.reply({ content: i18n.__('totalIs', { value: obj.total.toLocaleString(interaction.locale) }), ephemeral, files: [mFile] })
-      } catch (err: any) {
-        console.error({ error: err, interaction })
-        return await interaction.reply({ content: `${i18n.__('error')}: ${err.message}`, ephemeral: true })
-      } finally {
-        if (gFile != null) {
-          unlink(gFile)
-            .catch((err) => {
-              console.error({ error: err, interaction })
-            })
-        }
+      const obj: PEMObject = nums.reduce((total, el) => {
+        const value = total.value - Number.parseInt(el)
+        return { value, total: value, modifiers: modifiers || undefined }
+      }, { value: Number.parseInt(nums[0]), total: Number.parseInt(nums[0]), modifiers: modifiers || undefined })
+      if (modifiers) {
+        obj.total = addModifiers(modifiers, obj.total)
+      } else {
+        delete obj.modifiers
       }
+      const file = await buildTempFile(JSON.stringify(obj, null, 2))
+      const mFile = new MessageAttachment(file)
+      unlink(file)
+        .catch((error) => {
+          console.error({ error, interaction })
+        })
+      return await interaction.reply({ content: i18n.__('totalIs', { value: obj.total.toLocaleString(interaction.locale) }), ephemeral, files: [mFile] })
     }
   }
 }

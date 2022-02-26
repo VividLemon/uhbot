@@ -9,5 +9,4 @@ export default {
   async execute (interaction: CommandInteraction) {
     return await interaction.reply(i18n.__('pong'))
   }
-
 }

@@ -27,16 +27,11 @@ export default {
     } else if (to < from) {
       return await interaction.reply({ content: i18n.__('toNotValue'), ephemeral: true })
     } else {
-      try {
-        const hops = await addToStat(from, to)
-        let content = `${i18n.__('itTakes')} ${hops.toLocaleString(interaction.locale)} ${i18n.__n('hop', 2)}`
-        content = `${content}\n${i18n.__('toGetToLevel')} ${to.toLocaleString(interaction.locale)}`
-        content = `${content}\n${i18n.__('fromLevel')} ${from.toLocaleString(interaction.locale)}`
-        return await interaction.reply({ content, ephemeral })
-      } catch (err: any) {
-        console.error({ error: err, interaction })
-        return await interaction.reply({ content: `${i18n.__('error')}: ${err.message}`, ephemeral: true })
-      }
+      const hops = await addToStat(from, to)
+      let content = `${i18n.__('itTakes')} ${hops.toLocaleString(interaction.locale)} ${i18n.__n('hop', 2)}`
+      content = `${content}\n${i18n.__('toGetToLevel')} ${to.toLocaleString(interaction.locale)}`
+      content = `${content}\n${i18n.__('fromLevel')} ${from.toLocaleString(interaction.locale)}`
+      return await interaction.reply({ content, ephemeral })
     }
   }
 }

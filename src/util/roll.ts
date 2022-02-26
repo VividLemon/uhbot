@@ -8,7 +8,8 @@ import { addModifiers } from './'
  * @returns {Promise<RollReturns>}
  */
 export default ({ size, number, rerolls, explode, diceModifiers }: RollItems): Promise<Array<RollReturns>> => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
+    // TODO refactor?
     let maxSafeExplode = Number.parseInt(process.env.MAX_SAFE_EXPLODE!)
     let maxSafeRerolls = Number.parseInt(process.env.MAX_SAFE_REROLLS!)
     const allRolls: Array<RollReturns> = []
@@ -23,7 +24,6 @@ export default ({ size, number, rerolls, explode, diceModifiers }: RollItems): P
         modifieds: [],
         explodes: []
       })
-      // TODO fix this
       const curr = allRolls[i]
       for (let x = 0; x < number; x++) {
         let roll = random(1, size)

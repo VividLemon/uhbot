@@ -27,7 +27,6 @@ export default {
       option.setName('ephemeral')
         .setDescription('Hides the value for only you to see')),
   async execute (interaction: CommandInteraction) {
-    let gFile
     const number = interaction.options.getInteger('number')!
     const size = interaction.options.getInteger('size')!
     const ephemeral = interaction.options.getBoolean('ephemeral') ?? false
@@ -42,34 +41,25 @@ export default {
     } else if (rerolls >= Math.floor(Number.parseInt(process.env.MAX_SAFE_REROLLS!))) {
       return await interaction.reply({ content: i18n.__('rerollsLessThan', { value: Math.floor(Number.parseInt(process.env.MAX_SAFE_REROLLS!)).toLocaleString(interaction.locale) }), ephemeral: true })
     } else {
-      try {
-        const avg = Math.round(((size + 1) / 2) * (number))
-        const avgs = avg * rerolls
-        const obj: PEMObject = {
-          total: avgs,
-          value: avgs,
-          modifiers
-        }
-        if (modifiers) {
-          obj.total = addModifiers(modifiers, avg) * rerolls
-        } else {
-          delete obj.modifiers
-        }
-        const file = await buildTempFile(JSON.stringify(obj, null, 2))
-        gFile = file
-        const mFile = new MessageAttachment(file)
-        return await interaction.reply({ content: i18n.__('totalIs', { value: obj.total.toLocaleString(interaction.locale) }), ephemeral, files: [mFile] })
-      } catch (err: any) {
-        console.error({ error: err, interaction })
-        return await interaction.reply({ content: `${i18n.__('error')}: ${err.message}`, ephemeral: true })
-      } finally {
-        if (gFile != null) {
-          unlink(gFile)
-            .catch((err) => {
-              console.error({ error: err, interaction })
-            })
-        }
+      const avg = Math.round(((size + 1) / 2) * (number))
+      const avgs = avg * rerolls
+      const obj: PEMObject = {
+        total: avgs,
+        value: avgs,
+        modifiers
       }
+      if (modifiers) {
+        obj.total = addModifiers(modifiers, avg) * rerolls
+      } else {
+        delete obj.modifiers
+      }
+      const file = await buildTempFile(JSON.stringify(obj, null, 2))
+      const mFile = new MessageAttachment(file)
+      unlink(file)
+        .catch((error) => {
+          console.error({ error, interaction })
+        })
+      return await interaction.reply({ content: i18n.__('totalIs', { value: obj.total.toLocaleString(interaction.locale) }), ephemeral, files: [mFile] })
     }
   }
 }

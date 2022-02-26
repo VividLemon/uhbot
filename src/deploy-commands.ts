@@ -21,8 +21,8 @@ const activate = async () => {
     console.log('Started refreshing application (/) commands')
     await rest.put(Routes.applicationCommands(process.env.CLIENT!), { body: commands })
     console.log('Successfully reloaded application (/) commands')
-  } catch (err: any) {
-    console.error(err)
+  } catch (error: unknown) {
+    console.error(error)
   }
 }
 activate()

@@ -5,7 +5,7 @@
  * @returns {Promise<number>} number
  */
 export default (from: number, to: number): Promise<number> => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const difference = to - from
     let oldSkillPlus = from
     let total = 0
