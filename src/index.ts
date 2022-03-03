@@ -7,3 +7,4 @@ const manager = new ShardingManager(join(__dirname, './bot.js'), { token: proces
 manager.on('shardCreate', (shard) => console.log(`Launched shard ${shard.id}`))
 
 manager.spawn()
+// TODO I don't think yarn build works properly

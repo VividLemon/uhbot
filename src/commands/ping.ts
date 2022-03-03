@@ -6,7 +6,7 @@ export default {
   data: new SlashCommandBuilder()
     .setName('ping')
     .setDescription('Replies with pong'),
-  async execute (interaction: CommandInteraction) {
-    return await interaction.reply(i18n.__('pong'))
+  async execute (interaction: CommandInteraction): Promise<void> {
+    await interaction.reply(i18n.__('pong'))
   }
 }

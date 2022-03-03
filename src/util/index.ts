@@ -5,11 +5,15 @@ import buildTempFile from './buildTempFile'
 import getLang from './getLang'
 import roll from './roll'
 import rollsWriteContent from './rollsWriteContent'
+import sumBy from './sumBy'
+import randomInclusive from './randomInclusive'
 
 export {
   addModifiers,
   addToHop,
+  randomInclusive,
   addToStat,
+  sumBy,
   buildTempFile,
   getLang,
   roll,

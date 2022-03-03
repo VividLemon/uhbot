@@ -39,6 +39,7 @@ client.on('interactionCreate', async (interaction) => {
     await command.buttonExecute(interaction)
   } catch (error: unknown) {
     console.error({ error, interaction })
+    // TODO perhaps make an error class that can contain information about the error. While also obscuring internal issues
     return await interaction.reply({ content: i18n.__('errorWasLogged'), ephemeral: true })
   }
 })

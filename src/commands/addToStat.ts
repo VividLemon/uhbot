@@ -18,7 +18,7 @@ export default {
     .addIntegerOption((option) =>
       option.setName('ephemeral')
         .setDescription('Hides the value for only you to see')),
-  async execute (interaction: CommandInteraction) {
+  async execute (interaction: CommandInteraction): Promise<void> {
     const from = interaction.options.getInteger('from')!
     const to = interaction.options.getInteger('to')!
     const ephemeral = interaction.options.getBoolean('ephemeral') ?? false
@@ -31,7 +31,7 @@ export default {
       let content = `${i18n.__('itTakes')} ${hops.toLocaleString(interaction.locale)} ${i18n.__n('hop', 2)}`
       content = `${content}\n${i18n.__('toGetToLevel')} ${to.toLocaleString(interaction.locale)}`
       content = `${content}\n${i18n.__('fromLevel')} ${from.toLocaleString(interaction.locale)}`
-      return await interaction.reply({ content, ephemeral })
+      await interaction.reply({ content, ephemeral })
     }
   }
 }

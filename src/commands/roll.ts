@@ -31,7 +31,7 @@ export default {
     .addBooleanOption((option) =>
       option.setName('ephemeral')
         .setDescription('Hides the value for only you to see')),
-  async execute (interaction: CommandInteraction) {
+  async execute (interaction: CommandInteraction): Promise<void> {
     const number = interaction.options.getInteger('number')!
     const size = interaction.options.getInteger('size')!
     const ephemeral = interaction.options.getBoolean('ephemeral') ?? false
@@ -54,11 +54,11 @@ export default {
       const content = await rollsWriteContent(obj, modifiers)
       const file = await buildTempFile(JSON.stringify(content, null, 2))
       const mFile = new MessageAttachment(file)
+      await interaction.reply({ content: i18n.__('totalIs', { value: content.total.toLocaleString(interaction.locale) }), ephemeral, files: [mFile] })
       unlink(file)
         .catch((error) => {
           console.error({ error, interaction })
         })
-      return await interaction.reply({ content: i18n.__('totalIs', { value: content.total.toLocaleString(interaction.locale) }), ephemeral, files: [mFile] })
     }
   }
 }

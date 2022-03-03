@@ -19,7 +19,7 @@ export default {
     .addBooleanOption((option) =>
       option.setName('ephemeral')
         .setDescription('Hides the value for only you to see')),
-  async execute (interaction: CommandInteraction) {
+  async execute (interaction: CommandInteraction): Promise<void> {
     const ephemeral = interaction.options.getBoolean('ephemeral') ?? false
     const modifiers = interaction.options.getString('modifiers') ?? ''
     const values = interaction.options.getString('values')!
@@ -31,23 +31,22 @@ export default {
     } else if (nums.length > Number.parseInt(process.env.MAX_SAFE_ARGS!)) {
       console.warn(interaction)
       return await interaction.reply({ content: i18n.__('valueOverMaxSafeArgs'), ephemeral: true })
-    } else {
-      const obj: PEMObject = nums.reduce((total, el) => {
-        const value = total.value - Number.parseInt(el)
-        return { value, total: value, modifiers: modifiers || undefined }
-      }, { value: Number.parseInt(nums[0]), total: Number.parseInt(nums[0]), modifiers: modifiers || undefined })
-      if (modifiers) {
-        obj.total = addModifiers(modifiers, obj.total)
-      } else {
-        delete obj.modifiers
-      }
-      const file = await buildTempFile(JSON.stringify(obj, null, 2))
-      const mFile = new MessageAttachment(file)
-      unlink(file)
-        .catch((error) => {
-          console.error({ error, interaction })
-        })
-      return await interaction.reply({ content: i18n.__('totalIs', { value: obj.total.toLocaleString(interaction.locale) }), ephemeral, files: [mFile] })
     }
+    const obj: PEMObject = nums.slice(1).reduce((total, el) => {
+      const value = total.value - Number.parseInt(el)
+      return { value, total: value, modifiers: modifiers || undefined }
+    }, { value: Number.parseInt(nums[0]), total: Number.parseInt(nums[0]), modifiers: modifiers || undefined })
+    if (modifiers) {
+      obj.total = await addModifiers(modifiers, obj.total)
+    } else {
+      delete obj.modifiers
+    }
+    const file = await buildTempFile(JSON.stringify(obj, null, 2))
+    const mFile = new MessageAttachment(file)
+    await interaction.reply({ content: i18n.__('totalIs', { value: obj.total.toLocaleString(interaction.locale) }), ephemeral, files: [mFile] })
+    unlink(file)
+      .catch((error) => {
+        console.error({ error, interaction })
+      })
   }
 }

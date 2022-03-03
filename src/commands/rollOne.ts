@@ -27,7 +27,7 @@ export default {
     .addBooleanOption((option) =>
       option.setName('ephemeral')
         .setDescription('Hides the value for only you to see')),
-  async execute (interaction: CommandInteraction) {
+  async execute (interaction: CommandInteraction): Promise<void> {
     const size = interaction.options.getInteger('size')!
     const rerolls = interaction.options.getInteger('rerolls') ?? 1
     const ephemeral = interaction.options.getBoolean('ephemeral') ?? false
@@ -42,16 +42,15 @@ export default {
       return await interaction.reply({ content: i18n.__('rerollsNegativeOrZero'), ephemeral: true })
     } else if (rerolls >= Math.floor(Number.parseInt(process.env.MAX_SAFE_REROLLS!) / 10)) {
       return await interaction.reply({ content: i18n.__('rerollsLessThan', { value: Math.floor(Number.parseInt(process.env.MAX_SAFE_REROLLS!) / 10).toLocaleString(interaction.locale) }), ephemeral: true })
-    } else {
-      const obj = await roll({ size, number: 1, rerolls, explode, diceModifiers })
-      const content = await rollsWriteContent(obj, modifiers)
-      const file = await buildTempFile(JSON.stringify(content, null, 2))
-      const mFile = new MessageAttachment(file)
-      unlink(file)
-        .catch((error) => {
-          console.error({ error, interaction })
-        })
-      return await interaction.reply({ content: i18n.__('totalIs', { value: content.total.toLocaleString(interaction.locale) }), ephemeral, files: [mFile] })
     }
+    const obj = await roll({ size, number: 1, rerolls, explode, diceModifiers })
+    const content = await rollsWriteContent(obj, modifiers)
+    const file = await buildTempFile(JSON.stringify(content, null, 2))
+    const mFile = new MessageAttachment(file)
+    await interaction.reply({ content: i18n.__('totalIs', { value: content.total.toLocaleString(interaction.locale) }), ephemeral, files: [mFile] })
+    unlink(file)
+      .catch((error) => {
+        console.error({ error, interaction })
+      })
   }
 }

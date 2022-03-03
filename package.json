@@ -11,11 +11,11 @@
     "directory": "https://github.com/kwiksilver3441/cocbot"
   },
   "scripts": {
-    "deploy": "yarn node ./src/deploy-commands.js",
-    "build": "tsc --build",
-    "watch": "tsc --watch",
+    "deploy": "yarn node ./dist/deploy-commands.js",
+    "build": "yarn tsc --build",
+    "watch": "yarn tsc --watch",
     "dev": "nodemon ./dist/index.js",
-    "start": "yarn node ./dist/deploy-commands.js; yarn node ./dist/index.js"
+    "start": "node ./dist/index.js"
   },
   "dependencies": {
     "@discordjs/builders": "^0.11.0",
@@ -25,13 +25,11 @@
     "discord.js": "^13.6.0",
     "dotenv": "^14.1.0",
     "i18n": "^0.13.4",
-    "keyv": "^4.0.4",
-    "lodash": "^4.17.21"
+    "keyv": "^4.0.4"
   },
   "devDependencies": {
     "@types/i18n": "^0.13.2",
     "@types/keyv": "^3.1.3",
-    "@types/lodash": "^4.14.178",
     "@types/node": "^17.0.17",
     "@typescript-eslint/eslint-plugin": "^5.11.0",
     "@typescript-eslint/parser": "^5.11.0",
@@ -39,7 +37,7 @@
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^5.2.0",
+    "eslint-plugin-promise": "^6.0.0",
     "nodemon": "^2.0.15",
     "typescript": "^4.5.5"
   }
