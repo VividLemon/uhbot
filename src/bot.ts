@@ -4,7 +4,7 @@ import { join } from 'path'
 import { getLang } from './util/'
 import { i18n } from './plugins/'
 import { APIMessageInteraction } from 'discord-api-types'
-import { ApiError } from './error'
+import { apiErrorHandler } from './error'
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] })
 client.commands = new Collection()
@@ -26,11 +26,7 @@ client.on('interactionCreate', async (interaction) => {
     i18n.setLocale(await getLang(interaction.locale))
     await command.execute(interaction)
   } catch (error: unknown) {
-    console.error({ error, interaction })
-    if (error instanceof ApiError) {
-      return await interaction.reply({ content: error.message, ephemeral: true })
-    }
-    await interaction.reply({ content: `${i18n.__('unexpectedIssue')}. ${i18n.__('errorWasLogged')}`, ephemeral: true })
+    apiErrorHandler(error, interaction)
   }
 })
 
@@ -43,11 +39,7 @@ client.on('interactionCreate', async (interaction) => {
     i18n.setLocale(await getLang(interaction.locale))
     await command.buttonExecute(interaction)
   } catch (error: unknown) {
-    console.error({ error, interaction })
-    if (error instanceof ApiError) {
-      return await interaction.reply({ content: error.message, ephemeral: true })
-    }
-    await interaction.reply({ content: `${i18n.__('unexpectedIssue')}. ${i18n.__('errorWasLogged')}`, ephemeral: true })
+    apiErrorHandler(error, interaction)
   }
 })
 
