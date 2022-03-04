@@ -60,5 +60,13 @@
 	"explodeNotZeroOrNegative": "Explode cannot be negative or zero",
 	"explodeOverPercentile": "Explode cannot be greater than what's possible on a 100 sided die",
 	"explodeOverValue": "Explode cannot be greater than the size of the die",
-	"errorWasLogged": "There was an error while trying to execute this command\nError was logged"
+	"interalError": "There was an unexpected internal error.",
+	"incorrectValuesModifiers": "Incorrect values in modifiers",
+	"overMaxSafeArgs": "Value is over the maximum safe arguments limit. Why are you using this many arguments?",
+	"notZeroWhenDividing": "Value cannot be 0 when dividing!",
+	"unrecognizedType": "Unrecognized type of {{type}}",
+	"localNotStandard": "Locale is not standard length of 2 or 5",
+	"errorWasLogged": "The error was logged",
+	"unexpectedIssue": "Unexpected issue"
+
 }

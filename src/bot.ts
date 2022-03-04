@@ -4,6 +4,7 @@ import { join } from 'path'
 import { getLang } from './util/'
 import { i18n } from './plugins/'
 import { APIMessageInteraction } from 'discord-api-types'
+import { ApiError } from './error'
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] })
 client.commands = new Collection()
@@ -21,26 +22,32 @@ console.log('Ready')
 client.on('interactionCreate', async (interaction) => {
   if (!interaction.isCommand()) return
   const command = client.commands.get(interaction.commandName)
-  i18n.setLocale(await getLang(interaction.locale))
   try {
+    i18n.setLocale(await getLang(interaction.locale))
     await command.execute(interaction)
   } catch (error: unknown) {
     console.error({ error, interaction })
-    return await interaction.reply({ content: i18n.__('errorWasLogged'), ephemeral: true })
+    if (error instanceof ApiError) {
+      return await interaction.reply({ content: error.message, ephemeral: true })
+    }
+    await interaction.reply({ content: `${i18n.__('unexpectedIssue')}. ${i18n.__('errorWasLogged')}`, ephemeral: true })
   }
 })
 
 client.on('interactionCreate', async (interaction) => {
   if (!interaction.isButton()) return
   if (interaction.message.interaction == null) return
+  if ((interaction.message.interaction as unknown as APIMessageInteraction)?.name == null) return
   const command = client.commands.get((interaction.message.interaction as unknown as APIMessageInteraction).name)
-  i18n.setLocale(await getLang(interaction.locale))
   try {
+    i18n.setLocale(await getLang(interaction.locale))
     await command.buttonExecute(interaction)
   } catch (error: unknown) {
     console.error({ error, interaction })
-    // TODO perhaps make an error class that can contain information about the error. While also obscuring internal issues
-    return await interaction.reply({ content: i18n.__('errorWasLogged'), ephemeral: true })
+    if (error instanceof ApiError) {
+      return await interaction.reply({ content: error.message, ephemeral: true })
+    }
+    await interaction.reply({ content: `${i18n.__('unexpectedIssue')}. ${i18n.__('errorWasLogged')}`, ephemeral: true })
   }
 })
 

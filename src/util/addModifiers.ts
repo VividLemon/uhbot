@@ -1,3 +1,6 @@
+import { ApiError } from '../error'
+import { i18n } from '../plugins'
+
 /**
  *
  * @param {string} string
@@ -10,10 +13,10 @@ export default (modifiers: string, value: number): Promise<number> => {
     const regex = /[+|\-|*|x|/]\d+/g
     const match = modifiers.match(regex)
     if (match == null) {
-      return reject(new Error('Incorrect values in modifiers'))
+      return reject(ApiError.badRequest(i18n.__('incorrectValuesModifiers')))
     }
     if (match.length > Number.parseInt(process.env.MAX_SAFE_ARGS!)) {
-      return reject(new Error('Value is over the maximum safe arguments limit. Why are you using this many arguments?'))
+      return reject(ApiError.badRequest(i18n.__('overMaxSafeArgs')))
     }
     match.forEach((string) => {
       const type = string.substring(0, 1)
@@ -26,12 +29,12 @@ export default (modifiers: string, value: number): Promise<number> => {
         if (modifier !== 0) {
           modified = value / modifier
         } else {
-          return reject(new Error('Value cannot be 0 when dividing!'))
+          return reject(ApiError.badRequest(i18n.__('notZeroWhenDividing')))
         }
       } else if (type === '*' || type === 'x') {
         modified = value * modifier
       } else {
-        return reject(new Error(`Unrecognized type of ${type}}`))
+        return reject(ApiError.badRequest(i18n.__('Unrecognized type of ', { type })))
       }
     })
     return resolve(modified)
