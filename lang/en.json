@@ -73,5 +73,6 @@
 	"simplified": "Simplified {value}",
 	"rationalized": "Rationalized {value}",
 	"value": "Value {value}",
-	"derived": "Derived {value}"
+	"derived": "Derived {value}",
+	"fractioned": "Fractioned {value}"
 }
