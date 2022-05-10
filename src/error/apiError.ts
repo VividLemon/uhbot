@@ -14,6 +14,6 @@ export default class ApiError {
     }
 
     static internal (message: string) {
-      return new ApiError(400, `${message} ${i18n.__('errorWasLogged')}`)
+      return new ApiError(500, `${message} ${i18n.__('errorWasLogged')}`)
     }
 }

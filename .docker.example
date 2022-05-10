@@ -6,6 +6,8 @@ COPY package*.json ./
 
 COPY . .
 
-RUN yarn install
+RUN yarn install --prod
+
+RUN yarn deploy
 
 CMD [ "yarn", "start" ]

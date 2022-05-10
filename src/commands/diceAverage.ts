@@ -19,7 +19,7 @@ export default {
         .setRequired(true))
     .addStringOption((option) =>
       option.setName('modifiers')
-        .setDescription('Modifies the final with a given modified (+,-,*,/). Executes in the order provided, ex (+5-2*3)'))
+        .setDescription('Modifies the final with a given modified (+,-,*,/). Executes left to right, ex (+5-2*3)'))
     .addIntegerOption((option) =>
       option.setName('rerolls')
         .setDescription('Rerolls the same size and number of dice x amount of times'))

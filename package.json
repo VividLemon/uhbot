@@ -25,7 +25,8 @@
     "discord.js": "^13.6.0",
     "dotenv": "^14.1.0",
     "i18n": "^0.13.4",
-    "keyv": "^4.0.4"
+    "keyv": "^4.0.4",
+    "mathjs": "^10.5.2"
   },
   "devDependencies": {
     "@types/i18n": "^0.13.2",

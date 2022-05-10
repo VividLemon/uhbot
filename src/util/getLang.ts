@@ -13,7 +13,7 @@ export default (locale: string): Promise<string> => {
     } else if (locale.length === 2) {
       resolve(locale)
     } else {
-      reject(ApiError.internal(i18n.__('localNotStandard')))
+      reject(ApiError.internal(i18n.__('localeNotStandard')))
     }
   })
 }

@@ -104,6 +104,3 @@ src/
 
 #vscode
 .vscode/
-
-# Dockerfile
-Dockerfile

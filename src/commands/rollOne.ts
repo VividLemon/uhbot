@@ -14,10 +14,10 @@ export default {
         .setRequired(true))
     .addStringOption((option) =>
       option.setName('modifiers')
-        .setDescription('Modifies the final with a given modified (+,-,*,/). Executes in the order provided, ex (+5-2*3)'))
+        .setDescription('Modifies the final with a given modified (+,-,*,/). Executes left to right, ex (+5-2*3)'))
     .addStringOption((option) =>
       option.setName('dice-modifiers')
-        .setDescription('Modifies each dice roll with a given modifier. Explodes excluded'))
+        .setDescription('Modifies each dice roll with a given modifier. Explodes excluded. Executes left to right'))
     .addIntegerOption((option) =>
       option.setName('explode')
         .setDescription('Causes a reroll when the roll value hits or exceeds target'))
