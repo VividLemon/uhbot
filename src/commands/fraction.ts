@@ -26,6 +26,6 @@ export default {
       return await interaction.reply({ content: i18n.__('valueNotEmpty'), ephemeral: true })
     }
     const result = fraction(value)
-    await interaction.reply({ content: i18n.__('simplified', { value: result.toString() }), ephemeral })
+    await interaction.reply({ content: i18n.__('fractioned', { value: result.toString() }), ephemeral })
   }
 }
