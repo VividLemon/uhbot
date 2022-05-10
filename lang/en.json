@@ -67,6 +67,11 @@
 	"unrecognizedType": "Unrecognized type of {{type}}",
 	"localeNotStandard": "Locale is not standard length of 2 or 5",
 	"errorWasLogged": "The error was logged",
-	"unexpectedIssue": "Unexpected issue"
-
+	"unexpectedIssue": "Unexpected issue",
+	"valueNotSetError": "Value not set. How did you get here?",
+	"environmentNotSetError": "Environment not set. Server error",
+	"simplified": "Simplified {value}",
+	"rationalized": "Rationalized {value}",
+	"value": "Value {value}",
+	"derived": "Derived {value}"
 }

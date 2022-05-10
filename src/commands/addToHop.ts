@@ -2,6 +2,7 @@ import { SlashCommandBuilder } from '@discordjs/builders'
 import { CommandInteraction } from 'discord.js'
 import { addToHop } from '../util/'
 import { i18n } from '../plugins/'
+import { SystemError } from '../error'
 
 export default {
   data: new SlashCommandBuilder()
@@ -19,12 +20,17 @@ export default {
       option.setName('ephemeral')
         .setDescription('Hides the value for only you to see')),
   async execute (interaction: CommandInteraction): Promise<void> {
-    const skill = interaction.options.getInteger('skill')!
-    const hops = interaction.options.getInteger('hops')!
+    // Essential
+    const skill = interaction.options.getInteger('skill')
+    const hops = interaction.options.getInteger('hops')
+    if (skill == null || hops == null) { throw SystemError.valueNotSet() }
+    // Non-essential
     const ephemeral = interaction.options.getBoolean('ephemeral') ?? false
+
     if (skill < 0) {
       return await interaction.reply({ content: i18n.__('skillNotNegative'), ephemeral: true })
-    } else if (hops <= 0) {
+    }
+    if (hops <= 0) {
       return await interaction.reply({ content: i18n.__('hopsNotNegative'), ephemeral: true })
     }
     const obj = await addToHop(skill, hops)

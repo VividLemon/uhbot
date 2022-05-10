@@ -1,6 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { APIMessage } from 'discord-api-types'
 import { ButtonInteraction, CommandInteraction, MessageActionRow, MessageButton } from 'discord.js'
+import { SystemError } from '../error'
 import { i18n, keyv } from '../plugins/'
 
 export default {
@@ -15,11 +16,17 @@ export default {
       option.setName('expanded')
         .setDescription('Hail Sam Kass!')),
   async execute (interaction: CommandInteraction): Promise<void> {
-    const victim = interaction.options.getUser('victim')!
+    // Essential
+    const victim = interaction.options.getUser('victim')
+    if (victim == null) { throw SystemError.valueNotSet() }
+    if (process.env.CHALLENGE_EXPIRES_MS == null) { throw SystemError.environmentNotSet() }
+    // Non-essential
     const expanded = interaction.options.getBoolean('expanded') ?? false
+
     if (victim.bot || victim.system) {
       return await interaction.reply({ content: i18n.__('cannotChallengeBots'), ephemeral: true })
-    } else if (victim.id === interaction.user.id) {
+    }
+    if (victim.id === interaction.user.id) {
       return await interaction.reply({ content: i18n.__('cannotChallengeYourself'), ephemeral: true })
     }
     const chall = await keyv.get(`challenge-${interaction.user.id}-${victim.id}`)
@@ -32,7 +39,7 @@ export default {
         challengerPlayed: null,
         victim: victim.id,
         victimPlayed: null
-      }, Number.parseInt(process.env.CHALLENGE_EXPIRES_MS!))
+      }, Number.parseInt(process.env.CHALLENGE_EXPIRES_MS))
     const row = (expanded)
       ? new MessageActionRow()
         .addComponents(
@@ -52,7 +59,7 @@ export default {
       .addComponents(
         new MessageButton().setCustomId('end').setLabel(i18n.__('endGame')).setStyle('SECONDARY')
       )
-    const ttl = new Date(Date.now() + Number.parseInt(process.env.CHALLENGE_EXPIRES_MS!))
+    const ttl = new Date(Date.now() + Number.parseInt(process.env.CHALLENGE_EXPIRES_MS))
     await interaction.reply({ content: `${victim} ${i18n.__('challengedBy')} ${interaction.user} ${i18n.__('toADuel')}!\n${i18n.__('expiresAt')} ${ttl.toLocaleString(i18n.getLocale())}`, components: [row, endRow] })
   },
   async buttonExecute (interaction: ButtonInteraction): Promise<void> {
@@ -74,7 +81,8 @@ export default {
       if (interaction.user.id === challenger.id) {
         await keyv.delete(challengeStr)
         return await interaction.update({ content: i18n.__('gameEndedBy', { user: 'Challenger' }), components: [] })
-      } else if (interaction.user.id === victim.id) {
+      }
+      if (interaction.user.id === victim.id) {
         await keyv.delete(challengeStr)
         return await interaction.update({ content: i18n.__('gameEndedBy', { user: 'Victim' }), components: [] })
       }
@@ -213,8 +221,9 @@ export default {
       }
       return
     }
+    if (process.env.CHALLENGE_EXPIRES_MS == null) { throw SystemError.environmentNotSet() }
     // Set role to db
-    await keyv.set(challengeStr, copy, Number.parseInt(process.env.CHALLENGE_EXPIRES_MS!))
+    await keyv.set(challengeStr, copy, Number.parseInt(process.env.CHALLENGE_EXPIRES_MS))
     if ((interaction.user.id === challenger.id && challenge.challengerPlayed == null) || (interaction.user.id === victim.id && challenge.victimPlayed == null)) {
       return await interaction.update({ content: `${interaction.message.content}\n${interaction.user.toString()} ${i18n.__('hasPlayed')}!` })
     }

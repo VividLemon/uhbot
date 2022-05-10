@@ -27,15 +27,7 @@ export default async (allRolls: Array<any>, modifiers: string): Promise<RollsWri
   })
   const sum = await sumBy(allRolls, 'total')
   if (modifiers) {
-    return {
-      total: await addModifiers(modifiers, sum),
-      value: sum,
-      modifiers,
-      rolls: arr
-    }
+    return { total: await addModifiers(modifiers, sum), value: sum, modifiers, rolls: arr }
   }
-  return {
-    total: sum,
-    rolls: arr
-  }
+  return { total: sum, rolls: arr }
 }

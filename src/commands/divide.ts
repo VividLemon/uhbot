@@ -4,6 +4,7 @@ import { addModifiers, buildTempFile } from '../util/'
 import { CommandInteraction, MessageAttachment } from 'discord.js'
 import { i18n } from '../plugins/'
 import { PEMObject } from 'uhbot'
+import { SystemError } from '../error'
 
 export default {
   data: new SlashCommandBuilder()
@@ -15,22 +16,30 @@ export default {
         .setRequired(true))
     .addStringOption((option) =>
       option.setName('modifiers')
-        .setDescription('Modifies the final with a given modified (+,-,*,/). Executes left to right, ex (+5-2*3)'))
+        .setDescription('Modifies the final with a given modified (+,-,*,/)'))
     .addBooleanOption((option) =>
       option.setName('ephemeral')
         .setDescription('Hides the value for only you to see')),
   async execute (interaction: CommandInteraction): Promise<void> {
+    // Essential
+    const values = interaction.options.getString('values')
+    if (values == null) { throw SystemError.valueNotSet() }
+    if (process.env.MAX_SAFE_ARGS == null) { throw SystemError.environmentNotSet() }
+    // Non-essential
     const ephemeral = interaction.options.getBoolean('ephemeral') ?? false
     const modifiers = interaction.options.getString('modifiers') ?? ''
-    const values = interaction.options.getString('values')!
+
     const nums = values.split(/\s+/).filter((element) => !Number.isNaN(element))
     if (values.trim() === '') {
       return await interaction.reply({ content: i18n.__('valueNotEmpty'), ephemeral: true })
-    } else if (!nums.length) {
+    }
+    if (!nums.length) {
       return await interaction.reply({ content: i18n.__('valueYesNumbers'), ephemeral: true })
-    } else if (nums.findIndex((el) => Number.parseInt(el) === 0) !== -1) {
+    }
+    if (nums.findIndex((el) => Number.parseInt(el) === 0) !== -1) {
       return await interaction.reply({ content: i18n.__('noZeroDivide'), ephemeral: true })
-    } else if (nums.length > Number.parseInt(process.env.MAX_SAFE_ARGS!)) {
+    }
+    if (nums.length > Number.parseInt(process.env.MAX_SAFE_ARGS)) {
       console.warn(interaction)
       return await interaction.reply({ content: i18n.__('valueOverMaxSafeArgs'), ephemeral: true })
     }

@@ -1,6 +1,7 @@
 import { randomInclusive } from '.'
 import { RollItems, RollReturns } from 'uhbot'
 import { addModifiers } from './'
+import { SystemError } from '../error'
 
 /**
  *
@@ -8,8 +9,9 @@ import { addModifiers } from './'
  * @returns {Promise<RollReturns>}
  */
 export default async ({ size, number, rerolls, explode, diceModifiers }: RollItems): Promise<Array<RollReturns>> => {
-  let maxSafeExplode = Number.parseInt(process.env.MAX_SAFE_EXPLODE!)
-  let maxSafeRerolls = Number.parseInt(process.env.MAX_SAFE_REROLLS!)
+  if (process.env.MAX_SAFE_EXPLODE == null || process.env.MAX_SAFE_REROLLS == null) { throw SystemError.environmentNotSet() }
+  let maxSafeExplode = Number.parseInt(process.env.MAX_SAFE_EXPLODE)
+  let maxSafeRerolls = Number.parseInt(process.env.MAX_SAFE_REROLLS)
   const allRolls: Array<RollReturns> = []
   for (let i = 0; i < rerolls && maxSafeRerolls > 0; i++) {
     const curr: RollReturns = { total: 0, value: 0, modifiers: diceModifiers, rerollsSafeHit: false, explodeSafeHit: false, rolls: [], modifieds: [], explodes: [] }

@@ -3,6 +3,7 @@ import { buildTempFile, roll, rollsWriteContent } from '../util/'
 import { unlink } from 'fs/promises'
 import { CommandInteraction, MessageAttachment } from 'discord.js'
 import { i18n } from '../plugins/'
+import { SystemError } from '../error'
 
 export default {
   data: new SlashCommandBuilder()
@@ -14,7 +15,7 @@ export default {
         .setRequired(true))
     .addStringOption((option) =>
       option.setName('modifiers')
-        .setDescription('Modifies the final with a given modified (+,-,*,/). Executes left to right, ex (+5-2*3)'))
+        .setDescription('Modifies the final with a given modified (+,-,*,/)'))
     .addStringOption((option) =>
       option.setName('dice-modifiers')
         .setDescription('Modifies each dice roll with a given modifier. Explodes excluded. Executes left to right'))
@@ -28,20 +29,28 @@ export default {
       option.setName('ephemeral')
         .setDescription('Hides the value for only you to see')),
   async execute (interaction: CommandInteraction): Promise<void> {
-    const size = interaction.options.getInteger('size')!
+    // Essential
+    const size = interaction.options.getInteger('size')
+    if (size == null) { throw SystemError.valueNotSet() }
+    if (process.env.MAX_SAFE_REROLLS == null) { throw SystemError.environmentNotSet() }
+    // Non-essential
     const rerolls = interaction.options.getInteger('rerolls') ?? 1
     const ephemeral = interaction.options.getBoolean('ephemeral') ?? false
     const explode = interaction.options.getInteger('explode') ?? size + 1
     const modifiers = interaction.options.getString('modifiers') ?? ''
     const diceModifiers = interaction.options.getString('dice-modifiers') ?? ''
+
     if (size < 1) {
       return await interaction.reply({ content: i18n.__('sizeNegativeOrZero'), ephemeral: true })
-    } else if (explode > size + 1) {
+    }
+    if (explode > size + 1) {
       return await interaction.reply({ content: i18n.__('explodeOverValue'), ephemeral: true })
-    } else if (rerolls < 1) {
+    }
+    if (rerolls < 1) {
       return await interaction.reply({ content: i18n.__('rerollsNegativeOrZero'), ephemeral: true })
-    } else if (rerolls >= Math.floor(Number.parseInt(process.env.MAX_SAFE_REROLLS!) / 10)) {
-      return await interaction.reply({ content: i18n.__('rerollsLessThan', { value: Math.floor(Number.parseInt(process.env.MAX_SAFE_REROLLS!) / 10).toLocaleString(interaction.locale) }), ephemeral: true })
+    }
+    if (rerolls >= Math.floor(Number.parseInt(process.env.MAX_SAFE_REROLLS) / 10)) {
+      return await interaction.reply({ content: i18n.__('rerollsLessThan', { value: Math.floor(Number.parseInt(process.env.MAX_SAFE_REROLLS) / 10).toLocaleString(interaction.locale) }), ephemeral: true })
     }
     const obj = await roll({ size, number: 1, rerolls, explode, diceModifiers })
     const content = await rollsWriteContent(obj, modifiers)

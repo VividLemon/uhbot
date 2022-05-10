@@ -3,6 +3,7 @@ import { buildTempFile, roll, rollsWriteContent } from '../util/'
 import { unlink } from 'fs/promises'
 import { CommandInteraction, MessageAttachment } from 'discord.js'
 import { i18n } from '../plugins/'
+import { SystemError } from '../error'
 
 export default {
   data: new SlashCommandBuilder()
@@ -18,7 +19,7 @@ export default {
         .setRequired(true))
     .addStringOption((option) =>
       option.setName('modifiers')
-        .setDescription('Modifies the final with a given modified (+,-,*,/). Executes left to right, ex (+5-2*3)'))
+        .setDescription('Modifies the final with a given modified (+,-,*,/)'))
     .addStringOption((option) =>
       option.setName('dice-modifiers')
         .setDescription('Modifies each dice roll with a given modifier. Explodes excluded. Executes left to right'))
@@ -32,33 +33,41 @@ export default {
       option.setName('ephemeral')
         .setDescription('Hides the value for only you to see')),
   async execute (interaction: CommandInteraction): Promise<void> {
-    const number = interaction.options.getInteger('number')!
-    const size = interaction.options.getInteger('size')!
+    // Essential
+    const number = interaction.options.getInteger('number')
+    const size = interaction.options.getInteger('size')
+    if (number == null || size == null) { throw SystemError.valueNotSet() }
+    if (process.env.MAX_SAFE_REROLLS == null) { throw SystemError.environmentNotSet() }
+    // Non-essential
     const ephemeral = interaction.options.getBoolean('ephemeral') ?? false
     const explode = interaction.options.getInteger('explode') ?? size + 1
     const modifiers = interaction.options.getString('modifiers') ?? ''
     const diceModifiers = interaction.options.getString('dice-modifiers') ?? ''
     const rerolls = interaction.options.getInteger('rerolls') ?? 1
+
     if (size < 1) {
       return await interaction.reply({ content: i18n.__('sizeNegativeOrZero'), ephemeral: true })
-    } else if (number < 1) {
-      return await interaction.reply({ content: i18n.__('numberNegativeOrZero'), ephemeral: true })
-    } else if (explode > size + 1) {
-      return await interaction.reply({ content: i18n.__('explodeOverValue'), ephemeral: true })
-    } else if (rerolls < 1) {
-      return await interaction.reply({ content: i18n.__('rerollsNegativeOrZero'), ephemeral: true })
-    } else if (rerolls >= Math.floor(Number.parseInt(process.env.MAX_SAFE_REROLLS!) / 10)) {
-      return await interaction.reply({ content: i18n.__('rerollsLessThan', { value: Math.floor(Number.parseInt(process.env.MAX_SAFE_REROLLS!) / 10).toLocaleString(interaction.locale) }), ephemeral: true })
-    } else {
-      const obj = await roll({ size, number, rerolls, explode, diceModifiers })
-      const content = await rollsWriteContent(obj, modifiers)
-      const file = await buildTempFile(JSON.stringify(content, null, 2))
-      const mFile = new MessageAttachment(file)
-      await interaction.reply({ content: i18n.__('totalIs', { value: content.total.toLocaleString(interaction.locale) }), ephemeral, files: [mFile] })
-      unlink(file)
-        .catch((error) => {
-          console.error({ error, interaction })
-        })
     }
+    if (number < 1) {
+      return await interaction.reply({ content: i18n.__('numberNegativeOrZero'), ephemeral: true })
+    }
+    if (explode > size + 1) {
+      return await interaction.reply({ content: i18n.__('explodeOverValue'), ephemeral: true })
+    }
+    if (rerolls < 1) {
+      return await interaction.reply({ content: i18n.__('rerollsNegativeOrZero'), ephemeral: true })
+    }
+    if (rerolls >= Math.floor(Number.parseInt(process.env.MAX_SAFE_REROLLS) / 10)) {
+      return await interaction.reply({ content: i18n.__('rerollsLessThan', { value: Math.floor(Number.parseInt(process.env.MAX_SAFE_REROLLS) / 10).toLocaleString(interaction.locale) }), ephemeral: true })
+    }
+    const obj = await roll({ size, number, rerolls, explode, diceModifiers })
+    const content = await rollsWriteContent(obj, modifiers)
+    const file = await buildTempFile(JSON.stringify(content, null, 2))
+    const mFile = new MessageAttachment(file)
+    await interaction.reply({ content: i18n.__('totalIs', { value: content.total.toLocaleString(interaction.locale) }), ephemeral, files: [mFile] })
+    unlink(file)
+      .catch((error) => {
+        console.error({ error, interaction })
+      })
   }
 }

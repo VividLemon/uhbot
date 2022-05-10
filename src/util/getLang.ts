@@ -1,4 +1,4 @@
-import { ApiError } from '../error'
+import { SystemError } from '../error'
 import { i18n } from '../plugins'
 
 /**
@@ -10,10 +10,12 @@ export default (locale: string): Promise<string> => {
   return new Promise((resolve, reject) => {
     if (locale.length > 2) {
       resolve(locale.slice(0, 2))
-    } else if (locale.length === 2) {
-      resolve(locale)
-    } else {
-      reject(ApiError.internal(i18n.__('localeNotStandard')))
+      return
     }
+    if (locale.length === 2) {
+      resolve(locale)
+      return
+    }
+    reject(SystemError.internal(i18n.__('localeNotStandard')))
   })
 }

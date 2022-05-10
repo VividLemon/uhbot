@@ -4,19 +4,19 @@ import { join } from 'path'
 import { getLang } from './util/'
 import { i18n } from './plugins/'
 import { APIMessageInteraction } from 'discord-api-types'
-import { apiErrorHandler } from './error'
+import { SystemErrorHandler } from './error'
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] })
 client.commands = new Collection()
 const commandFiles = readdirSync(join(__dirname, 'commands')).filter((file) => file.endsWith('.js'))
 for (const file of commandFiles) {
   const path = join(__dirname, 'commands', file)
-  import(path).then((command) => client.commands.set(command.default.data.name, command.default))
+  import(path).then((command) => client.commands.set(command.default.data.name, command.default)).catch(() => process.exit(1))
 }
 
 client.once('ready', () => {
-client.user!.setActivity('/ slash commands', { type: 'WATCHING' })
-console.log('Ready')
+  client.user!.setActivity('/ slash commands', { type: 'WATCHING' })
+  console.log('Ready')
 })
 
 client.on('interactionCreate', async (interaction) => {
@@ -26,7 +26,7 @@ client.on('interactionCreate', async (interaction) => {
     i18n.setLocale(await getLang(interaction.locale))
     await command.execute(interaction)
   } catch (error: unknown) {
-    apiErrorHandler(error, interaction)
+    SystemErrorHandler(error, interaction)
   }
 })
 
@@ -39,7 +39,7 @@ client.on('interactionCreate', async (interaction) => {
     i18n.setLocale(await getLang(interaction.locale))
     await command.buttonExecute(interaction)
   } catch (error: unknown) {
-    apiErrorHandler(error, interaction)
+    SystemErrorHandler(error, interaction)
   }
 })
 
