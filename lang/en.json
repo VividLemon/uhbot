@@ -61,7 +61,7 @@
 	"explodeOverPercentile": "Explode cannot be greater than what's possible on a 100 sided die",
 	"explodeOverValue": "Explode cannot be greater than the size of the die",
 	"interalError": "There was an unexpected internal error.",
-	"incorrectValuesModifiers": "Incorrect values in modifiers",
+	"incorrectValuesModifiers": "Incorrect values in modifiers, cannot contain parenthesis, must start with the operator of [+,-,*,/]. Ex: +25/3-3",
 	"overMaxSafeArgs": "Value is over the maximum safe arguments limit. Why are you using this many arguments?",
 	"notZeroWhenDividing": "Value cannot be 0 when dividing!",
 	"unrecognizedType": "Unrecognized type of {{type}}",

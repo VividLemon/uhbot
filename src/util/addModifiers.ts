@@ -14,8 +14,15 @@ export default (modifiers: string, value: number): Promise<number> => {
     const str = `${value}${modifiers}`
     const strNoSpace = str.replaceAll(/\s/g, '')
     const test = regex.test(strNoSpace)
-    if (test === false) { return reject(SystemError.badRequest(i18n.__('incorrectValuesModifiers'))) }
+    if (test === false) {
+      reject(SystemError.badRequest(i18n.__('incorrectValuesModifiers')))
+      return
+    }
     const result = Number.parseFloat(format(evaluate(strNoSpace)))
+    if (!Number.isFinite(result)) {
+      reject(SystemError.badRequest(i18n.__('noZeroDivide')))
+      return
+    }
     return resolve(result)
   })
 }
