@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { CommandInteraction } from 'discord.js'
 import { i18n } from '../plugins/'
-import { rationalize } from 'mathjs'
+import { format, rationalize } from 'mathjs'
 import { SystemError } from '../error'
 
 export default {
@@ -25,7 +25,7 @@ export default {
     if (values.trim() === '') {
       return await interaction.reply({ content: i18n.__('valueNotEmpty'), ephemeral: true })
     }
-    const result = rationalize(values)
-    await interaction.reply({ content: i18n.__('rationalized', { value: result.toString() }), ephemeral })
+    const result = format(rationalize(values.replaceAll(/\s/g, '')))
+    await interaction.reply({ content: `${i18n.__('rationalized')} ${result}`, ephemeral })
   }
 }

@@ -10,18 +10,18 @@ export default class SystemError {
     }
 
     static badRequest (message: string) {
-      return new SystemError(400, `${message} ${i18n.__('errorWasLogged')}`)
+      return new SystemError(400, message)
     }
 
     static internal (message: string) {
-      return new SystemError(500, `${message} ${i18n.__('errorWasLogged')}`)
+      return new SystemError(500, message)
     }
 
     static valueNotSet () {
-      return new SystemError(500, `${i18n.__('valueNotSetError')} ${i18n.__('errorWasLogged')}}`)
+      return new SystemError(500, i18n.__('valueNotSetError'))
     }
 
     static environmentNotSet () {
-      return new SystemError(500, `${i18n.__('environmentNotSetError')} ${i18n.__('errorWasLogged')}}`)
+      return new SystemError(500, i18n.__('environmentNotSetError'))
     }
 }

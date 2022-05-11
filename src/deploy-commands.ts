@@ -14,7 +14,7 @@ for (const file of commandFiles) {
 if (process.env.TOKEN == null) { process.exit(1) }
 const rest = new REST({ version: '9' }).setToken(process.env.TOKEN)
 
-const activate = async () => {
+const activate = async (): Promise<void> => {
   try {
     if (process.env.CLIENT == null || process.env.GUILD == null) { throw SystemError.environmentNotSet() }
     console.log('Started refreshing guild (/) commands.')
@@ -25,6 +25,7 @@ const activate = async () => {
     console.log('Successfully reloaded application (/) commands')
   } catch (error: unknown) {
     console.error(error)
+    process.exit(1)
   }
 }
 activate()

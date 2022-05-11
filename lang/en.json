@@ -70,9 +70,9 @@
 	"unexpectedIssue": "Unexpected issue",
 	"valueNotSetError": "Value not set. How did you get here?",
 	"environmentNotSetError": "Environment not set. Server error",
-	"simplified": "Simplified {value}",
-	"rationalized": "Rationalized {value}",
-	"value": "Value {value}",
-	"derived": "Derived {value}",
-	"fractioned": "Fractioned {value}"
+	"simplified": "Simplified:",
+	"rationalized": "Rationalized:",
+	"value": "Value:",
+	"derived": "Derived:",
+	"fractioned": "Fractioned:"
 }

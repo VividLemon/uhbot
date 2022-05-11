@@ -1,6 +1,6 @@
 import { SystemError } from '../error'
 import { i18n } from '../plugins'
-import { evaluate } from 'mathjs'
+import { evaluate, format } from 'mathjs'
 
 /**
  *
@@ -11,12 +11,11 @@ import { evaluate } from 'mathjs'
 export default (modifiers: string, value: number): Promise<number> => {
   return new Promise((resolve, reject) => {
     const regex = /^\d+([+|/|*|-]-?\d+)+$/
-    const modifiersNoSpace = modifiers.replaceAll(/\s/g, '')
-    const test = regex.test(modifiersNoSpace)
-    if (test === false) {
-      return reject(SystemError.badRequest(i18n.__('incorrectValuesModifiers')))
-    }
-    const result = Number.parseFloat(evaluate(`${value} ${modifiersNoSpace}`))
+    const str = `${value}${modifiers}`
+    const strNoSpace = str.replaceAll(/\s/g, '')
+    const test = regex.test(strNoSpace)
+    if (test === false) { return reject(SystemError.badRequest(i18n.__('incorrectValuesModifiers'))) }
+    const result = Number.parseFloat(format(evaluate(strNoSpace)))
     return resolve(result)
   })
 }

@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { CommandInteraction } from 'discord.js'
 import { i18n } from '../plugins/'
-import { derivative } from 'mathjs'
+import { derivative, format } from 'mathjs'
 import { SystemError } from '../error'
 
 export default {
@@ -30,7 +30,7 @@ export default {
     if (values.trim() === '') {
       return await interaction.reply({ content: i18n.__('valueNotEmpty'), ephemeral: true })
     }
-    const result = derivative(values, by)
-    await interaction.reply({ content: i18n.__('derived', { value: result.toString() }), ephemeral })
+    const result = format(derivative(values.replaceAll(/\s/g, ''), by))
+    await interaction.reply({ content: `${i18n.__('derived')} ${result}`, ephemeral })
   }
 }

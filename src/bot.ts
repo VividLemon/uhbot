@@ -15,7 +15,8 @@ for (const file of commandFiles) {
 }
 
 client.once('ready', () => {
-  client.user!.setActivity('/ slash commands', { type: 'WATCHING' })
+  if (client.user == null) { process.exit(1) }
+  client.user.setActivity('/ slash commands', { type: 'WATCHING' })
   console.log('Ready')
 })
 

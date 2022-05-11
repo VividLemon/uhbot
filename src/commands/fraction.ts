@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { CommandInteraction } from 'discord.js'
 import { i18n } from '../plugins/'
-import { fraction } from 'mathjs'
+import { format, fraction } from 'mathjs'
 import { SystemError } from '../error'
 
 export default {
@@ -25,7 +25,7 @@ export default {
     if (value.trim() === '') {
       return await interaction.reply({ content: i18n.__('valueNotEmpty'), ephemeral: true })
     }
-    const result = fraction(value)
-    await interaction.reply({ content: i18n.__('fractioned', { value: result.toString() }), ephemeral })
+    const result = format(fraction(value.replaceAll(/\s/g, '')))
+    await interaction.reply({ content: `${i18n.__('fractioned')} ${result}`, ephemeral })
   }
 }

@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { CommandInteraction } from 'discord.js'
 import { i18n } from '../plugins/'
-import { sqrt } from 'mathjs'
+import { format, sqrt } from 'mathjs'
 import { SystemError } from '../error'
 
 export default {
@@ -25,7 +25,7 @@ export default {
     if (number.trim() === '') {
       return await interaction.reply({ content: i18n.__('valueNotEmpty'), ephemeral: true })
     }
-    const result = sqrt(Number.parseFloat(number))
-    await interaction.reply({ content: i18n.__('value', { value: result.toString() }), ephemeral })
+    const result = format(sqrt(Number.parseFloat(number.replaceAll(/\s/g, ''))))
+    await interaction.reply({ content: `${i18n.__('value')} ${result}`, ephemeral })
   }
 }
