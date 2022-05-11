@@ -11,7 +11,7 @@
     "directory": "https://github.com/kwiksilver3441/cocbot"
   },
   "scripts": {
-    "deploy": "yarn node ./dist/deploy-commands.js",
+    "deploy": "node ./dist/deploy-commands.js",
     "build": "yarn tsc --build",
     "watch": "yarn tsc --watch",
     "dev": "nodemon ./dist/index.js",

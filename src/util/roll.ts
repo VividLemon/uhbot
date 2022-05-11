@@ -21,7 +21,7 @@ export default async ({ size, number, rerolls, explode, diceModifiers }: RollIte
       if (diceModifiers) {
         const added = await addModifiers(diceModifiers, roll)
         curr.modifieds.push(added)
-        curr.value = curr.value ?? 0 + roll
+        curr.value = (curr.value ?? 0) + roll
         curr.total = curr.total + added
       } else {
         delete curr.value

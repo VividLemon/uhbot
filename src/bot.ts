@@ -11,11 +11,11 @@ client.commands = new Collection()
 const commandFiles = readdirSync(join(__dirname, 'commands')).filter((file) => file.endsWith('.js'))
 for (const file of commandFiles) {
   const path = join(__dirname, 'commands', file)
-  import(path).then((command) => client.commands.set(command.default.data.name, command.default)).catch(() => process.exit(1))
+  import(path).then((command) => client.commands.set(command.default.data.name, command.default))
 }
 
 client.once('ready', () => {
-  if (client.user == null) { process.exit(1) }
+  if (client.user == null) { return }
   client.user.setActivity('/ slash commands', { type: 'WATCHING' })
   console.log('Ready')
 })

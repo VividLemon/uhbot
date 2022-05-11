@@ -9,10 +9,10 @@ const commands: Array<unknown> = []
 const commandFiles = readdirSync(join(__dirname, 'commands')).filter((file) => file.endsWith('.js'))
 for (const file of commandFiles) {
   const path = join(__dirname, 'commands', file)
-  import(path).then((command) => commands.push(command.default.data.toJSON())).catch(() => process.exit(1))
+  import(path).then((command) => commands.push(command.default.data.toJSON()))
 }
-if (process.env.TOKEN == null) { process.exit(1) }
-const rest = new REST({ version: '9' }).setToken(process.env.TOKEN)
+
+const rest = new REST({ version: '9' }).setToken(process.env.TOKEN!)
 
 const activate = async (): Promise<void> => {
   try {
@@ -25,7 +25,6 @@ const activate = async (): Promise<void> => {
     console.log('Successfully reloaded application (/) commands')
   } catch (error: unknown) {
     console.error(error)
-    process.exit(1)
   }
 }
 activate()
