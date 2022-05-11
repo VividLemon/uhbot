@@ -20,7 +20,7 @@ export default (modifiers: string, value: number): Promise<number> => {
     }
     const result = Number.parseFloat(format(evaluate(strNoSpace)))
     if (!Number.isFinite(result)) {
-      reject(SystemError.badRequest(i18n.__('noZeroDivide')))
+      reject(SystemError.badRequest(i18n.__('numberNotFinite')))
       return
     }
     return resolve(result)

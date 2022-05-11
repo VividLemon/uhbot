@@ -74,5 +74,6 @@
 	"rationalized": "Rationalized:",
 	"value": "Value:",
 	"derived": "Derived:",
-	"fractioned": "Fractioned:"
+	"fractioned": "Fractioned:",
+	"numberNotFinite": "Number is not finite. Can happen when dividing by zero"
 }
