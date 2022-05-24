@@ -4,7 +4,7 @@ import { evaluate, format } from 'mathjs'
 
 /**
  *
- * @param {string} string
+ * @param {string} modifiers
  * @param {number} value
  * @returns {Promise<number>} number
  */

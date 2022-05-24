@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
-import { unlink } from 'fs/promises'
+import { unlink } from 'node:fs/promises'
 import { addModifiers, buildTempFile } from '../util/'
 import { CommandInteraction, MessageAttachment } from 'discord.js'
 import { i18n } from '../plugins/'

@@ -1,7 +1,7 @@
 import { REST } from '@discordjs/rest'
 import { Routes } from 'discord-api-types/v9'
-import { readdirSync } from 'fs'
-import { join } from 'path'
+import { readdirSync } from 'node:fs'
+import { join } from 'node:path'
 import 'dotenv/config'
 import { SystemError } from './error'
 

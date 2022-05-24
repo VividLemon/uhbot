@@ -1,7 +1,7 @@
-import { randomUUID } from 'crypto'
-import { writeFile } from 'fs/promises'
-import { tmpdir } from 'os'
-import { join } from 'path'
+import { randomUUID } from 'node:crypto'
+import { writeFile } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 /**
  * @async
  * @param {string} content

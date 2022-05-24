@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { addModifiers, buildTempFile } from '../util/'
-import { unlink } from 'fs/promises'
+import { unlink } from 'node:fs/promises'
 import { CommandInteraction, MessageAttachment } from 'discord.js'
 import { i18n } from '../plugins/'
 import { PEMObject } from 'uhbot'

@@ -1,5 +1,5 @@
 import { I18n } from 'i18n'
-import { join } from 'path'
+import { join } from 'node:path'
 
 const i18n = new I18n()
 

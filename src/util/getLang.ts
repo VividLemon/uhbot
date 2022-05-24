@@ -8,14 +8,22 @@ import { i18n } from '../plugins'
  */
 export default (locale: string): Promise<string> => {
   return new Promise((resolve, reject) => {
-    if (locale.length > 2) {
-      resolve(locale.slice(0, 2))
+    const local = locale.trim()
+    if (local.length === 0) {
+      reject(SystemError.internal(i18n.__('localeNotStandard')))
       return
     }
-    if (locale.length === 2) {
-      resolve(locale)
+    const split = local.split('-')
+    const [lang] = split
+    if (split.length === 2) {
+      const trimmed = lang.trim()
+      if (trimmed.length === 0) {
+        reject(SystemError.internal(i18n.__('localeNotStandard')))
+        return
+      }
+      resolve(trimmed)
       return
     }
-    reject(SystemError.internal(i18n.__('localeNotStandard')))
+    resolve(lang)
   })
 }
