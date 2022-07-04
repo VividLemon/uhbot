@@ -1,7 +1,7 @@
-import {  } from '../src/util'
+import { roll } from '../src/util'
 
 describe('does', () => {
-    it('does', () => {
+  it('does', () => {
 
-    })
+  })
 })
